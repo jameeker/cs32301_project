@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import logo from './logo.svg';
-import BulletinBoard from './pages/bulletin_board';
+import BulletinBoard from '../pages/bulletin_board/bulletin_board.js';
 
 function App() {
   return (
