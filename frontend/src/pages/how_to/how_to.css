@@ -1,0 +1,19 @@
+.howto-page {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  ol {
+    line-height: 1.8;
+    margin-left: 20px;
+  }
+  
+  li {
+    margin-bottom: 10px;
+  }

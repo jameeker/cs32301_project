@@ -22,6 +22,22 @@ def create_app(config_class=Config):
     app.register_blueprint(about)
     app.register_blueprint(how_to)
     
+    # Define routes
+    @app.route('/')
+    def home():
+        return {
+            "name": "Bulletin Board API",
+            "version": "1.0.0",
+            "endpoints": {
+                "bulletin_board": "/api/bulletin-board/notes",
+                "personal_board": "/api/personal-board/notes",
+                "about": "/api/about",
+                "how_to": "/api/how-to",
+                "health": "/api/health"
+            },
+            "status": "running"
+        }
+    
     @app.route('/api/health', methods=['GET'])
     def health_check():
         return {"status": "healthy"}
