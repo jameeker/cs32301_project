@@ -1,21 +1,21 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import './NavButtonBar.css';
 
 const NavButtonBar = () => {
-  const navigate = useNavigate();
+  const history = useHistory();
 
   return (
     <div className="nav-button-bar">
       <button 
         className="nav-button about-button"
-        onClick={() => navigate('/about')}
+        onClick={() => history.push('/about')}
       >
         About
       </button>
       <button 
         className="nav-button howto-button"
-        onClick={() => navigate('/how-to')}
+        onClick={() => history.push('/how-to')}
       >
         How-to
       </button>
