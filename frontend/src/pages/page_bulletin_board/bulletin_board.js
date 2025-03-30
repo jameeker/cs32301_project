@@ -1,6 +1,6 @@
 // import React from 'react';
 
-// const BulletinBoard = () => {
+// const PageBulletinBoard = () => {
 //   // Basic styling for the bulletin board
 //   const boardStyle = {
 //     backgroundColor: '#c9b18b',  // Cork board color
@@ -52,13 +52,13 @@
 //   );
 // };
 
-// export default BulletinBoard;
+// export default PageBulletinBoard;
 
 import React, { useState, useEffect } from 'react';
 import { NavButtonBar } from '../../components';
 import './bulletin_board.css';
 
-const BulletinBoard = () => {
+const PageBulletinBoard = () => {
   const [notes, setNotes] = useState([
     {
       id: 1,
@@ -94,4 +94,4 @@ const BulletinBoard = () => {
   );
 };
 
-export default BulletinBoard;
+export default PageBulletinBoard;

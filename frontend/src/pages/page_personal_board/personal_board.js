@@ -2,7 +2,7 @@ import React from 'react';
 import { HomeButton, NavButtonBar } from '../../components';
 import './personal_board.css';
 
-const PersonalBoard = () => {
+const PagePersonalBoard = () => {
   return (
     <div className="personal-board">
       <h1>Personal Bulletin Board</h1>
@@ -15,4 +15,4 @@ const PersonalBoard = () => {
   );
 };
 
-export default PersonalBoard;
+export default PagePersonalBoard;

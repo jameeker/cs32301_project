@@ -2,7 +2,7 @@ import React from 'react';
 import { HomeButton, NavButtonBar } from '../../components';
 import './about.css';
 
-const About = () => {
+const PageAbout = () => {
   return (
     <div className="about-page">
       <h1>About the Bulletin Board</h1>
@@ -15,4 +15,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default PageAbout;

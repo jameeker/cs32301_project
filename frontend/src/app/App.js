@@ -3,18 +3,18 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import logo from './logo.svg';
 
-// import BulletinBoard from '../pages/bulletin_board/bulletin_board.js';
-// import BulletinBoard from '../pages/bulletin_board';
-// import PersonalBoard from '../pages/personal_board';
-import { BulletinBoard, PersonalBoard, About, HowTo } from '../pages';
+// import PageBulletinBoard from '../pages/bulletin_board/bulletin_board.js';
+// import PageBulletinBoard from '../pages/bulletin_board';
+// import PagePersonalBoard from '../pages/personal_board';
+import { PageBulletinBoard, PagePersonalBoard, PageAbout, HowTo } from '../pages';
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Switch>
-          <BulletinBoard />
-          {/* <PersonalBoard/> */}
+          <PageBulletinBoard />
+          {/* <PagePersonalBoard/> */}
 
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
