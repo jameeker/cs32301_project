@@ -1,5 +1,4 @@
-// For client ID generation so everyone's individual browser session of our web app is
-// unique to them.
+// For client ID generation so everyone's individual browser session of our web app is unique to them.
 
 export const getClientId = () => {
     let clientId = localStorage.getItem('bulletin_board_client_id');
