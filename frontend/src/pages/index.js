@@ -1,9 +1,7 @@
-// Re-export components from subdirectories
+// Re-export components from the index.js file in each of the subdirectories
+// for this main index.js file (frontend/src/pages/index.js)
+// Add more as you create them
 export { default as PageBulletinBoard } from './page_bulletin_board';
 export { default as PagePersonalBoard } from './page_personal_board';
-export { default as PageAbout } from './page_about';
-export { default as HowTo } from './page_how_to';
-
-// Add more as you create them
-// export { default as About } from './about';
-// export { default as HowTo } from './how_to';
+export { default as PageAbout }         from './page_about';
+export { default as HowTo }             from './page_how_to';

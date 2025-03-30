@@ -1,78 +1,152 @@
-// import React from 'react';
-
-// const PageBulletinBoard = () => {
-//   // Basic styling for the bulletin board
-//   const boardStyle = {
-//     backgroundColor: '#c9b18b',  // Cork board color
-//     width: '90%',
-//     height: '80vh',
-//     margin: '40px auto',
-//     padding: '20px',
-//     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
-//     borderRadius: '5px',
-//     position: 'relative',
-//     border: '15px solid #8B4513'  // Brown frame
-//   };
-
-//   const headerStyle = {
-//     textAlign: 'center',
-//     color: '#333',
-//     marginBottom: '20px',
-//     fontFamily: 'Arial, sans-serif'
-//   };
-
-//   // Just a placeholder message on the board
-//   const placeholderStyle = {
-//     backgroundColor: '#ffd3b6',  // Light orange sticky note
-//     padding: '15px',
-//     width: '200px',
-//     height: '150px',
-//     boxShadow: '3px 3px 5px rgba(0, 0, 0, 0.2)',
-//     transform: 'rotate(-3deg)',
-//     position: 'absolute',
-//     top: '100px',
-//     left: '150px',
-//     fontFamily: 'Comic Sans MS, cursive, sans-serif',
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     fontSize: '16px'
-//   };
-
-//   return (
-//     <div>
-//       <h1 style={headerStyle}>Community Bulletin Board</h1>
-//       <div style={boardStyle}>
-//         {/* This is just a placeholder sticky note */}
-//         <div style={placeholderStyle}>
-//           This is where notes will appear. Coming soon!
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default PageBulletinBoard;
-
-import React, { useState, useEffect } from 'react';
+// bulletin_board.js (frontend/src/pages/page_bulletin_board/bulletin_board.js)
+import React, { useState } from 'react';
 import { NavButtonBar } from '../../components';
 import './bulletin_board.css';
 
 const PageBulletinBoard = () => {
-  const [notes, setNotes] = useState([
+  const [notes] = useState([
     {
       id: 1,
-      content: 'Welcome to the Bulletin Board!',
+      content: 'note 1',
       color: '#ffd3b6',
       position_x: 100,
       position_y: 100
+    },
+    {
+      id: 2,
+      content: 'note 2',
+      color: '#ffffcc', // yellow
+      position_x: 300,
+      position_y: 150
+    },
+    {
+      id: 3,
+      content: 'note 3',
+      color: '#ccffcc', // green
+      position_x: 500,
+      position_y: 200
+    },
+    {
+      id: 4,
+      content: 'note 4',
+      color: '#ccffff', // blue
+      position_x: 200,
+      position_y: 250
+    },
+    {
+      id: 5,
+      content: 'note 5',
+      color: '#ffffcc', // yellow
+      position_x: 1300,
+      position_y: 300
+    },
+    {
+      id: 6,
+      content: 'note 6',
+      color: '#ffccff', // pink
+      position_x: 1000,
+      position_y: 500
+    },
+    {
+      id: 7,
+      content: 'note 7',
+      color: '#ccffcc', // green
+      position_x: 1400,
+      position_y: 90
+    },
+    {
+      id: 8,
+      content: 'note 9',
+      color: '#ffccff', // pink
+      position_x: 950,
+      position_y: 280
+    },
+    {
+      id: 9,
+      content: 'note 10',
+      color: '#ccffff', // blue
+      position_x: 700,
+      position_y: 10
+    },
+    {
+      id: 10,
+      content: 'note 10',
+      color: '#ffffcc', // yellow
+      position_x: 1000,
+      position_y: 150
+    },
+    {
+      id: 11,
+      content: 'note 12',
+      color: '#ffccff', // pink
+      position_x: 780, 
+      position_y: 350
+    },
+    {
+      id: 12,
+      content: 'note 8',
+      color: '#f5f5f5', // white
+      position_x: 880,
+      position_y: 40
     }
   ]);
+
+  // Big prompt notes (like the white rectangles in your image)
+  const prompts = [
+    {
+      id: 1,
+      content: 'Prompt note 1',
+      position_x: 150,
+      position_y: 180,
+      width: 180,
+      height: 220,
+      background: '#ffffcc', // yellow background
+      border: '3px solid #ffcc00' // yellow border
+    },
+    {
+      id: 2,
+      content: 'Prompt note 2',
+      position_x: 650,
+      position_y: 200,
+      width: 220,
+      height: 280,
+      background: '#ffccff', // pink background
+      border: '3px solid #ff66ff' // pink border
+    }
+  ];
 
   return (
     <div className="bulletin-board">
       <h1>Community Bulletin Board</h1>
       <div className="board">
+        {/* Render prompt notes */}
+        {prompts.map(prompt => (
+          <div 
+            key={`prompt-${prompt.id}`}
+            className="prompt-note"
+            style={{
+              position: 'absolute',
+              left: `${prompt.position_x}px`,
+              top: `${prompt.position_y}px`,
+              width: `${prompt.width}px`,
+              height: `${prompt.height}px`,
+              backgroundColor: prompt.background,
+              border: prompt.border,
+              padding: '15px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              textAlign: 'center',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+              zIndex: 5
+            }}
+          >
+            {prompt.content}
+          </div>
+        ))}
+        
+        {/* Render regular notes */}
         {notes.map(note => (
           <div 
             key={note.id}

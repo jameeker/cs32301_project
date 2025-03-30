@@ -1,31 +1,32 @@
 .nav-button-bar {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    gap: 10px;
-  }
-  
-  .nav-button {
-    padding: 10px 15px;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s;
-  }
-  
-  .nav-button:hover {
-    transform: scale(1.05);
-  }
-  
-  .about-button {
-    background-color: #3498db;
-    color: white;
-  }
-  
-  .howto-button {
-    background-color: #f39c12;
-    color: white;
-  }
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+}
+
+.nav-button {
+  padding: 6px 15px;
+  border: 1px solid #cccccc;
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+.about-button {
+  background-color: #ffffff;
+}
+
+.how-to-button {
+  background-color: #ffffff;
+}
+
+.nav-button:hover {
+  background-color: #e0e0e0;
+}

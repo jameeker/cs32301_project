@@ -3,9 +3,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import logo from './logo.svg';
 
-// import PageBulletinBoard from '../pages/bulletin_board/bulletin_board.js';
-// import PageBulletinBoard from '../pages/bulletin_board';
-// import PagePersonalBoard from '../pages/personal_board';
 import { PageBulletinBoard, PagePersonalBoard, PageAbout, HowTo } from '../pages';
 
 function App() {

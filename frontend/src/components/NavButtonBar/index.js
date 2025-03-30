@@ -14,10 +14,10 @@ const NavButtonBar = () => {
         About
       </button>
       <button 
-        className="nav-button howto-button"
+        className="nav-button how-to-button"
         onClick={() => history.push('/how-to')}
       >
-        How-to
+        How-To
       </button>
     </div>
   );
