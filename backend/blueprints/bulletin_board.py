@@ -97,6 +97,33 @@ def create_note():
     notes.append(new_note)
     return jsonify(new_note), 201
 
+# Update an existing note
+@bulletin_board.route('/notes/<int:note_id>', methods=['PATCH'])
+def update_note(note_id):
+    data = request.json
+
+    for note in notes:
+        if note['id'] == note_id:
+            # Only updates the fields that are present in the request
+            note['content'] = data.get('content', note['content'])
+            note['color'] = data.get('color', note['color'])
+            note['position_x'] = data.get('position_x', note['position_x'])
+            note['position_y'] = data.get('position_y', note['position_y'])
+            return jsonify(note), 200 # 200 - Ok
+
+    return jsonify({"error": "Note not found"}), 404 # 404 - Not found
+
+# Delete a note
+@bulletin_board.route('/notes/<int:note_id>', methods=['DELETE'])
+def delete_note(note_id):
+    for note in notes:
+        if note['id'] == note_id:
+            notes.remove(note)
+            return jsonify({"status": "Note deleted"}), 200
+
+    # If no note with the matching id is found
+    return jsonify({"error": "Note not found"}), 404
+
 #####################################################
 # Prompt FUNCTIONS:
 #####################################################
@@ -128,12 +155,42 @@ def create_prompt():
     prompts.append(new_prompt)
     return jsonify(new_prompt), 201
 
+# Update an existing prompt
+# Not sure if we need the ability to update a prompt
+# (because all the notes responding to the origninal wouldn't make sense anymore)
+@bulletin_board.route('/prompts/<int:prompt_id>', methods=['PATCH'])
+def update_prompt(prompt_id):
+    data = request.json
+
+    for prompt in prompts:
+        if prompt['id'] == prompt_id:
+            # Only updates the fields that are present in the request
+            prompt['content'] = data.get('content', prompt['content'])
+            prompt['color'] = data.get('color', prompt['color'])
+            prompt['position_x'] = data.get('position_x', prompt['position_x'])
+            prompt['position_y'] = data.get('position_y', prompt['position_y'])
+            return jsonify(prompt), 200 # 200 - Ok
+
+    return jsonify({"error": "Prompt not found"}), 404 # 404 - Not found
+
+# Delete a prompt
+# Also not sure if necessary (because there would be "ghost" notes that respond to nothing)
+@bulletin_board.route('/prompts/<int:prompt_id>', methods=['DELETE'])
+def delete_prompt(prompt_id):
+    for prompt in prompts:
+        if prompt['id'] == prompt_id:
+            prompts.remove(prompt)
+            return jsonify({"status": "Prompt deleted"}), 200
+
+    # If no prompt with the matching id is found
+    return jsonify({"error": "Prompt not found"}), 404
+
 #####################################################
 # Reset FUNCTIONS:
 #####################################################
 
 # Helper function for reset_board()
-# Might store default prompts in the database later so that is why this is so simple right now
+# Might store default prompts in the database later so this is simple right now
 # For example, this might run SQL later
 def get_default_prompts():
     return default_prompts
