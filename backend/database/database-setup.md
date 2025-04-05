@@ -7,7 +7,8 @@
 Ubuntu/Debian: `sudo apt update`
                `sudo apt install mysql-server`
 
-macOS:         `brew install mysql`
+macOS:         `brew update` 
+               `brew install mysql`
 
 ### 1.2 Start MySQL
 
