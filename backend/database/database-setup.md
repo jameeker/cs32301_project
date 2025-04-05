@@ -38,16 +38,18 @@ Windows: `"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p`
 ### 2.2 Create the empty database
 
 ```sql
-CREATE DATABASE bulletin_board; -- Run this to create an empty database
+CREATE DATABASE hic_project; -- Run this to create an empty database
+-- The database is named hic_project
 ```
 
 ### 2.3 Create a dedicated user
 
 ```sql
-CREATE USER 'bulletin_user'@'localhost' IDENTIFIED BY 'your_secure_password'; -- (!) Replace 'your_secure_password' with a strong password
-GRANT ALL PRIVILEGES ON bulletin_board.* TO 'bulletin_user'@'localhost';
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'your_secure_password'; -- (!) Replace 'your_secure_password' with a strong password
+GRANT ALL PRIVILEGES ON hic_project.* TO 'user'@'localhost';
 FLUSH PRIVILEGES;
 -- This creates a dedicated user with access only to the bulletin board database
+-- NOTE: it'll execute as 3 separate queries
 ```
 
 ### 2.4 Exit MySQL
@@ -71,21 +73,22 @@ create `.py` Python scripts for each change/update being made to the MySQL datab
 ### 3.3 Create a database configuration file
 
 In the project root `/your/path/to/the/repo/cs32301_project`,
-create a `db.ini` file.
+create a `yoyo.ini` file.
 
 ```ini
 [DEFAULT]
-database = mysql://bulletin_user:your_secure_password@localhost/bulletin_board
-; Replace your_secure_password with the password you created earlier
+database = mysql://user:your_secure_password@localhost/hic_project
+; your_secure_password: replace with the password you created earlier
+; user: replace with your username if you set one. or try 'root'
 ```
 
 ### 3.4 Apply and verify successful migrations
 
 While being inside your `(.venv)` in the same terminal:
 
-Apply the migrations by running: `yoyo apply --database mysql://bulletin_user:your_secure_password@localhost/bulletin_board ./migrations`
+Apply the migrations by running: `yoyo apply --database mysql://user:your_secure_password@localhost/hic_project ./database-migrations`
 
-Verify migrations by running: `yoyo list --database mysql://bulletin_user:your_secure_password@localhost/bulletin_board ./migrations`
+Verify migrations by running: `yoyo list --database mysql://user:your_secure_password@localhost/hic_project ./database-migrations`
 (should see your newly applied migration show up here)
 
 
@@ -93,4 +96,4 @@ Verify migrations by running: `yoyo list --database mysql://bulletin_user:your_s
 
 ### Rollback a Yoyo migration
 To revert to the most recently applied migration, run: 
-`yoyo rollback --database mysql://bulletin_user:your_secure_password@localhost/bulletin_board ./migrations`
+`yoyo rollback --database mysql://user:your_secure_password@localhost/hic_project ./database-migrations`
