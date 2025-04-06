@@ -1,0 +1,60 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures it is above everything */
+
+}
+
+.modal {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 600px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.countdown {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.description {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.close-button {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 20px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 128px;
+  height: 32px;
+}
+
+.close-button:hover {
+  background-color: darkred;
+}
+
+.clock-icon {
+  width: 60px;  /* Change width to your desired size */
+  height: 60px; /* Change height to your desired size */
+}
