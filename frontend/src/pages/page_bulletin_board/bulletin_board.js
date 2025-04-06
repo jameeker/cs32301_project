@@ -1,10 +1,12 @@
-// bulletin_board.js (frontend/src/pages/page_bulletin_board/bulletin_board.js)
+// personal_board.js (frontend/src/pages/page_bulletin_board/bulletin_board.js)
 import React, { useState } from 'react';
 import { NavButtonBar } from '../../components';
 import './bulletin_board.css';
+import ClockOverlay from '../page_clock_stats/clock_stats';
 
 const PageBulletinBoard = () => {
-  const [notes] = useState([
+  const [showOverlay, setShowOverlay] = useState(false); // Add overlay state
+  const notes = [
     {
       id: 1,
       content: 'note 1',
@@ -89,7 +91,7 @@ const PageBulletinBoard = () => {
       position_x: 880,
       position_y: 40
     }
-  ]);
+  ];
 
   // Big prompt notes (like the white rectangles in your image)
   const prompts = [
@@ -118,7 +120,19 @@ const PageBulletinBoard = () => {
   return (
     <div className="bulletin-board">
       <h1>Community Bulletin Board</h1>
+
+      <button onClick={() => setShowOverlay(true)} className="open-overlay-button">
+        Open Clock Overlay
+      </button>
+
       <div className="board">
+      
+      
+
+      {showOverlay && <ClockOverlay onClose={() => setShowOverlay(false)} />}
+
+      
+      <NavButtonBar />
         {/* Render prompt notes */}
         {prompts.map(prompt => (
           <div 
@@ -164,6 +178,7 @@ const PageBulletinBoard = () => {
       
       {/* Add navigation buttons */}
       <NavButtonBar />
+      
     </div>
   );
 };
