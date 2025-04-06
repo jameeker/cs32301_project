@@ -7,6 +7,7 @@ from blueprints.bulletin_board import bulletin_board
 from blueprints.personal_board import personal_board
 from blueprints.about import about
 from blueprints.how_to import how_to
+from blueprints.community_stats import community_stats
 
 def create_app(config_class=Config):
     # Initialize Flask app
@@ -21,6 +22,8 @@ def create_app(config_class=Config):
     app.register_blueprint(personal_board)
     app.register_blueprint(about)
     app.register_blueprint(how_to)
+    app.register_blueprint(community_stats)
+
     
     # Define routes
     @app.route('/')
@@ -33,7 +36,9 @@ def create_app(config_class=Config):
                 "personal_board": "/api/personal-board/notes",
                 "about": "/api/about",
                 "how_to": "/api/how-to",
-                "health": "/api/health"
+                "health": "/api/health",
+                "community_stats": "/api/community-stats"
+
             },
             "status": "running"
         }
@@ -43,6 +48,10 @@ def create_app(config_class=Config):
         return {"status": "healthy"}
     
     return app
+
+
+app = Flask(__name__)
+app.register_blueprint(community_stats)
 
 if __name__ == '__main__':
     app = create_app()
