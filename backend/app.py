@@ -29,7 +29,8 @@ def create_app(config_class=Config):
             "name": "Bulletin Board API",
             "version": "1.0.0",
             "endpoints": {
-                "bulletin_board": "/api/bulletin-board/notes",
+                "bulletin_board_notes": "/api/bulletin-board/notes",
+                "bulletin_board_prompts": "/api/bulletin-board/prompts",
                 "personal_board": "/api/personal-board/notes",
                 "about": "/api/about",
                 "how_to": "/api/how-to",
