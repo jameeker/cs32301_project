@@ -1,6 +1,6 @@
 // personal_board.js (frontend/src/pages/page_bulletin_board/bulletin_board.js)
 import React, { useState } from 'react';
-import { NavButtonBar } from '../../components';
+import { NavButtonBar, ClockIcon } from '../../components';
 import './bulletin_board.css';
 import ClockOverlay from '../page_clock_stats/clock_stats';
 
@@ -120,10 +120,11 @@ const PageBulletinBoard = () => {
   return (
     <div className="bulletin-board">
       <h1>Community Bulletin Board</h1>
-
+      
       <button onClick={() => setShowOverlay(true)} className="open-overlay-button">
-        Open Clock Overlay
+        <ClockIcon/> {}
       </button>
+      
 
       <div className="board">
       
