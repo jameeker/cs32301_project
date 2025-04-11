@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { NavButtonBar } from '../../components';
+import { NoteOverlay } from './page_view_note'
 import './personal_board.css';
 
 // Import Background Images
@@ -16,6 +17,7 @@ const backgrounds = [
 ];
 
 const PagePersonalBoard = () => {
+  
 
     const [showOverlay, setShowOverlay] = useState(false); // Add overlay state
     const notes = [

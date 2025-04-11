@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { NavButtonBar } from '../../components';
 import './bulletin_board.css';
 import ClockOverlay from '../page_clock_stats/clock_stats';
+import NoteOverlay from '../page_view_note/view_note'
 
 const PageBulletinBoard = () => {
   const [showOverlay, setShowOverlay] = useState(false); // Add overlay state
