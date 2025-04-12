@@ -65,7 +65,7 @@ def database_health_check(db):
     }
     
     # Check required tables
-    required_tables = ['Users', 'Notes', 'Note_States']
+    required_tables = ['users', 'notes', 'note_states'] # Changed table names to lower-case to fix case sensitiviy issues
     existing_tables = show_tables(db)
     
     missing_tables = [table for table in required_tables if table not in existing_tables]
