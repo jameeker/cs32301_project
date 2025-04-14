@@ -205,7 +205,7 @@ def show_tables(db, include_yoyo=False, only_app_tables=True):
     
     if only_app_tables:
         # Only include your application tables
-        app_tables = ['Users', 'Notes', 'Note_States']
+        app_tables = ['users', 'notes', 'note_states'] # Changed to lower-case because it wasn't showing with case-sensitivity
         all_tables = [table for table in all_tables if table in app_tables]
     
     return all_tables
