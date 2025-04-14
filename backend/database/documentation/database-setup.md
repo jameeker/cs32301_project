@@ -34,6 +34,7 @@ On Windows:
 macOS/Linux: `mysql -u root -p` (enter the root password you set in step 1.3)
 
 Windows: `"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p`
+PowerShell: & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" "-u" "root" "-p"
 
 ### 2.2 Create the empty database
 
