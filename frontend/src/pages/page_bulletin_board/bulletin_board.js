@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import { NavButtonBar, ClockIcon } from '../../components';
 import './bulletin_board.css';
 import ClockOverlay from '../page_clock_stats/clock_stats';
-<<<<<<< HEAD
 import ViewNoteOverlay from '../page_view_note/view_note';
-=======
-import NoteOverlay from '../page_view_note/view_note'
->>>>>>> 0e97a0d83542cfdfa413f5d2b10213583d0fdf24
 
 const PageBulletinBoard = () => {
   const [showClockOverlay, setShowClockOverlay] = useState(false);

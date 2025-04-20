@@ -12,7 +12,7 @@ const ClockOverlay = ({ onClose }) => {
           Impermanence is one of __WEBSITE NAME__’s core values, as after 24 hours, 
           all of the notes on the board will be reset, and new prompts will be posted.
            However, you can save any notes you’d like to your personal board to keep them for future reference.</p>
-        <button onClick={onClose} className="close-button">Close</button>
+        <button onClick={onClose} className="overlay-close-button">Close</button>
       </div>
     </div>
   );

@@ -37,7 +37,7 @@
   margin-bottom: 20px;
 }
 
-.close-button {
+.overlay-close-button {
   display: block;
   margin: 0 auto;
   padding: 10px 20px;
@@ -50,7 +50,7 @@
   height: 32px;
 }
 
-.close-button:hover {
+.overlay-close-button:hover {
   background-color: darkred;
 }
 
