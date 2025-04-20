@@ -27,6 +27,7 @@ h1 {
   margin: 0 auto;
   background-color: #dfd8cf; /* Cork board color */
   border: 15px solid #844111; /* Wooden frame */
+  outline: 2px solid black;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   padding: 10px;
