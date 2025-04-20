@@ -42,7 +42,7 @@
   margin: 0 auto;
   padding: 10px 20px;
   background-color: red;
-  color: white;
+  color: rgb(255, 255, 255);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -55,6 +55,6 @@
 }
 
 .clock-icon {
-  width: 60px;  /* Change width to your desired size */
-  height: 60px; /* Change height to your desired size */
+  width: 60px; 
+  height: 60px;
 }
