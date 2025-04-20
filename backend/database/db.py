@@ -182,6 +182,91 @@ def move_note_to_trash(db, note_id, user_id):
     db.commit()
     return trash_state
 
+def remove_note(db, note_id, user_id=None):
+    """Remove a note from the database.
+    
+    Args:
+        db: Active database session
+        note_id: The ID of the note to delete
+        user_id: Optional. If provided, verify the user is the creator.
+    
+    Returns:
+        True if deleted, False if not found or unauthorized
+    """
+    note = db.query(Note).filter(Note.note_id == note_id).first()
+    
+    if not note:
+        return False  # Note does not exist
+    
+    if user_id and note.created_by != user_id:
+        return False  # User is not the owner, deny delete
+    
+    db.delete(note)   # This will also delete all associated NoteState entries
+    db.commit()
+    return True
+
+def modify_note(db, note_id, new_content, user_id=None):
+    """Modify the content of a note.
+    
+    Args:
+        db: Active database session
+        note_id: The ID of the note to update
+        new_content: New text content for the note
+        user_id: Optional. If provided, only allow modification by the creator.
+    
+    Returns:
+        True if modified, False if not found or unauthorized
+    """
+    note = db.query(Note).filter(Note.note_id == note_id).first()
+    
+    if not note:
+        return False  # Note not found
+    
+    if user_id and note.created_by != user_id:
+        return False  # User is not the owner, deny edit
+
+    note.content = new_content
+    db.commit()
+    return True
+
+# When you call filter_notes(), make sure to specify the paramaters
+def filter_notes(
+    db,
+    user_id=None,
+    text_contains=None,
+    color=None,
+    created_after=None,
+    created_before=None,
+    within_bounds=None  # Tuple: (x_min, x_max, y_min, y_max)
+):
+    query = db.query(Note)
+    
+    if user_id:
+        query = query.filter(Note.created_by == user_id)
+    
+    if text_contains:
+        query = query.filter(Note.content.ilike(f"%{text_contains}%"))
+    
+    if color:
+        query = query.filter(Note.color == color)
+    
+    if created_after:
+        query = query.filter(Note.created_at >= created_after)
+    
+    if created_before:
+        query = query.filter(Note.created_at <= created_before)
+
+    if within_bounds:
+        x_min, x_max, y_min, y_max = within_bounds
+        query = query.join(NoteState).filter(
+            NoteState.position_x >= x_min,
+            NoteState.position_x <= x_max,
+            NoteState.position_y >= y_min,
+            NoteState.position_y <= y_max
+        )
+
+    return query.all()
+
 # Database Testing Functions ##########################################################################################
 
 def show_tables(db, include_yoyo=False, only_app_tables=True):
