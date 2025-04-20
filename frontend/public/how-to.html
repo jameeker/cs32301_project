@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .navbar {
+            background: black;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-size: 18px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+        .header {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .content-box {
+            border: 2px solid black;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .image-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .icon {
+            width: 50px;
+            height: 50px;
+        }
+        .image-preview {
+            width: 600px;
+            height: auto;
+            border: 2px solid black;
+        }
+        .home-icon {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">Main Bulletin Board</div>
+    <div class="container">
+        <div class="header">How to Guide</div>
+        <div class="content-box">
+            <p><strong>Introduction:</strong> This section contains information about how to use the platform...</p>
+            <p>Follow the steps carefully to navigate and use the features effectively.</p>
+        </div>
+        <div class="image-section">
+            <img src="pencil-icon.png" alt="Edit" class="icon">
+            <img src="screenshot-example.png" alt="Example Screenshot" class="image-preview">
+            <img src="zoom-icon.png" alt="Zoom" class="icon">
+        </div>
+    </div>
+    <img src="home-icon.png" alt="Home" class="home-icon" onclick="goHome()">
+    <script>
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
