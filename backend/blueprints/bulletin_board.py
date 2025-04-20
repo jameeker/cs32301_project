@@ -69,6 +69,29 @@ default_prompts = [
 # Note FUNCTIONS:
 #####################################################
 
+# Initial function to test with Postman 
+@bulletin_board.route('/notes', methods=['GET']) # API endpoints
+def get_all_public_notes():
+    db = get_db()
+    notes_with_states = get_public_notes(db)
+    
+    # Transform SQLAlchemy objects to JSON-serializable dictionaries
+    result = []
+    for note, state in notes_with_states:
+        result.append({
+            'id': note.note_id,
+            'content': note.content,
+            'color': note.color,
+            'type': note.type,
+            'is_prompt': note.is_prompt,
+            'position_x': state.position_x * 1000,  # Convert from 0-1 range to pixels
+            'position_y': state.position_y * 500,   # Adjust multiplier based on your board size
+            'rotation': state.rotation,
+            'z_index': state.z_index
+        })
+    
+    return jsonify(result)
+
 # Get community notes
 # Checks if its time for a board reset every time this is called
 @bulletin_board.route('/notes', methods=['GET'])

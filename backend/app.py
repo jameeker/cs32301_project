@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_cors import CORS
+from flask_cors import CORS # enables backend Flask app to accept API requests from the frontend React app
 from config import Config
 
 # Import blueprints
@@ -50,10 +50,10 @@ def create_app(config_class=Config):
     
     return app
 
+# app = Flask(__name__)
+# app.register_blueprint(community_stats)
 
-app = Flask(__name__)
-app.register_blueprint(community_stats)
-
+# Main
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True, port=5000)
