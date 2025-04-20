@@ -6,4 +6,8 @@ export { default as PagePersonalBoard } from './page_personal_board';
 export { default as PageAbout }         from './page_about';
 export { default as HowTo }             from './page_how_to';
 export { default as ClockStats }        from './page_clock_stats';
+<<<<<<< HEAD
 export { default as ViewNote }          from './page_view_note';
+=======
+export { default as PageViewNote }      from './page_view_note';
+>>>>>>> 0e97a0d83542cfdfa413f5d2b10213583d0fdf24
