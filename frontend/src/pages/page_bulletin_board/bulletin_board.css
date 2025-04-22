@@ -28,6 +28,19 @@ h1 {
   padding: 10px;
 }
 
+.board.loading, .board.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #666;
+  min-height: 300px;
+}
+
+.board.error {
+  color: #cc0000;
+}
+
 .note {
   position: absolute;
   width: 150px;
