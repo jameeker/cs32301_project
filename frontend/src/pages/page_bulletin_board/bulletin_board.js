@@ -12,6 +12,7 @@ const PageBulletinBoard = () => {
     setShowNoteOverlay(true);
   };
 
+  
   const notes = [
     { id: 1, content: 'note 1', color: '#ffd3b6', position_x: 100, position_y: 100 },
     { id: 2, content: 'note 2', color: '#ffffcc', position_x: 300, position_y: 150 },
