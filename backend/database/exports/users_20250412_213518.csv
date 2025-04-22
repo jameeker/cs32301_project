@@ -1,0 +1,3 @@
+user_id,session_token,created_at,last_active,user_agent,ip_hash,theme_preference,board_background
+SEED-TEST-DATA-USER-001,test-session-token,2025-04-13 01:27:34,2025-04-13 01:27:34,Python/3.x,dummyhash123,default,default_corkboard.jpg
+user-test-1,session-token-123,2025-04-12 17:43:58,2025-04-12 17:43:58,Mozilla/5.0,12ca17b49af2289436f303e0166030a21e525d266e209267433801a8fd4071a0,default,default_corkboard.jpg
