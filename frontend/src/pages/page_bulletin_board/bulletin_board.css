@@ -22,6 +22,7 @@ h1 {
   margin: 0 auto;
   background-color: #dfd8cf; /* Cork board color */
   border: 15px solid #844111; /* Wooden frame */
+  outline: 2px solid black;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   padding: 10px;
@@ -47,6 +48,7 @@ h1 {
   padding: 15px;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
   border-radius: 2px;
+  border: 2px solid #000000;
   font-family: 'Comic Sans MS', cursive, sans-serif;
   transform: rotate(-3deg);
   cursor: pointer;
@@ -109,3 +111,20 @@ h1 {
 .note.blue { background-color: #ccffff; }
 .note.pink { background-color: #ffccff; }
 .note.white { background-color: #f5f5f5; }
+
+.open-overlay-button{
+  position: absolute;
+  top: 3%;
+  left: 80%;
+  color: darkgray;
+  float: center;
+  margin-right: -80%;
+  background-color: white;
+  border: #33333300;
+}
+
+.open-overlay-button:hover{
+  color: black;
+  cursor: pointer;
+}
+

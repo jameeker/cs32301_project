@@ -1,20 +1,60 @@
 .personal-board {
-    width: 100%;
-    height: 100vh;
-    background-color: #e8d8be;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  h1 {
-    text-align: center;
-    color: #333;
-    padding: 20px 0;
-    margin: 0;
-  }
-  
-  p {
-    text-align: center;
-    font-size: 18px;
-    color: #555;
-  }
+  width: 100%;
+  height: 100vh;
+  background-color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  padding: 10px;
+
+  background-size: cover;         /* Ensures it covers the full area without repeating */
+  background-position: center;    /* Centers the image */
+  background-repeat: no-repeat;   /* Prevents tiling */
+  image-rendering: auto;          /* Helps prevent blurriness */
+  background-attachment: fixed;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  padding: 10px 0;
+  margin: 0 0 30px 0;
+}
+
+.board {
+  position: relative;
+  width: 85%;
+  height: calc(100% - 200px);
+  margin: 0 auto;
+  background-color: #dfd8cf; /* Cork board color */
+  border: 15px solid #844111; /* Wooden frame */
+  outline: 2px solid black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  padding: 10px;
+}
+
+
+/* Arrows container */
+.bg-arrows {
+  width: 85%;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+/* Arrow buttons */
+.bg-arrow-button {
+  background-color: #fff4e6;
+  border: 2px solid #844111;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s ease;
+}
+
+.bg-arrow-button:hover {
+  transform: scale(1.1);
+}
