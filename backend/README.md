@@ -37,8 +37,7 @@ To make changes to the database and add items, create a new `000-migration-file.
 python -m yoyo apply --database mysql://USERNAME:PASSWORD@localhost/juiceexpress src/migrations
 ```
 
-Example: `python -m yoyo apply --database mysql://root:@localhost/cs32301project backend/database-migrations`
-
+Example: `python -m yoyo apply --database mysql://root:@localhost/hic_project backend/database/database-migrations`
 **Note: this will ask you to create a <yoyo.ini> config file that stores your database credentials in plain text (already in `gitignore`)**
 
 ## Running ===========================================================================================================

@@ -1,8 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavButtonBar, ClockIcon } from '../../components';
-import './bulletin_board.css';
 import ClockOverlay from '../page_clock_stats/clock_stats';
 import ViewNoteOverlay from '../page_view_note/view_note';
+import './bulletin_board.css';
+
+// Helper function to determine the appropriate CSS color class from color hex value
+const getColorClass = (color) => {
+  if (!color) return 'yellow'; // Default
+  
+  color = color.toLowerCase();
+  if (color.includes('ff') && color.includes('cc') && !color.includes('ff, cc')) return 'yellow';
+  if (color.includes('cc') && color.includes('ff') && color.includes('cc')) return 'green';
+  if (color.includes('cc') && color.includes('ff') && color.includes('ff')) return 'blue';
+  if (color.includes('ff') && color.includes('cc') && color.includes('ff')) return 'pink';
+  if (color.includes('f5') || color === '#ffffff' || color === '#fff') return 'white';
+  
+  // Default to using the color directly
+  return '';
+};
 
 const PageBulletinBoard = () => {
 
@@ -12,156 +27,6 @@ const PageBulletinBoard = () => {
   const handleNoteClick = () => {
     setShowNoteOverlay(true);
   };
-
-  
-  // const notes = [
-  //   { id: 1, content: 'note 1', color: '#ffd3b6', position_x: 100, position_y: 100 },
-  //   { id: 2, content: 'note 2', color: '#ffffcc', position_x: 300, position_y: 150 },
-  //   { id: 3, content: 'note 3', color: '#ccffcc', position_x: 500, position_y: 200 },
-  //   { id: 4, content: 'note 4', color: '#ccffff', position_x: 200, position_y: 250 },
-  //   { id: 5, content: 'note 5', color: '#ffffcc', position_x: 1300, position_y: 300 },
-  //   { id: 6, content: 'note 6', color: '#ffccff', position_x: 1000, position_y: 500 },
-  //   { id: 7, content: 'note 7', color: '#ccffcc', position_x: 1400, position_y: 90 },
-  //   { id: 8, content: 'note 9', color: '#ffccff', position_x: 950, position_y: 280 },
-  //   { id: 9, content: 'note 10', color: '#ccffff', position_x: 700, position_y: 10 },
-  //   { id: 10, content: 'note 10', color: '#ffffcc', position_x: 1000, position_y: 150 },
-  //   { id: 11, content: 'note 12', color: '#ffccff', position_x: 780, position_y: 350 },
-  //   { id: 12, content: 'note 8', color: '#ccffcc', position_x: 880, position_y: 40 }
-  // ];
-
-  // const prompts = [
-  //   {
-  //     id: 1,
-  //     content: 'Prompt note 1',
-  //     position_x: 150,
-  //     position_y: 180,
-  //     width: 180,
-  //     height: 220,
-  //     background: '#ffffcc',
-  //     border: '3px solid #ffcc00'
-  //   },
-  //   {
-  //     id: 2,
-  //     content: 'Prompt note 2',
-  //     position_x: 650,
-  //     position_y: 200,
-  //     width: 220,
-  //     height: 280,
-  //     background: '#ffccff',
-  //     border: '3px solid #ff66ff'
-  //   }
-  // ];
-
-  // const [notes] = useState([
-  //   {
-  //     id: 1,
-  //     content: 'note 1',
-  //     color: '#ffd3b6',
-  //     position_x: 100,
-  //     position_y: 100
-  //   },
-  //   {
-  //     id: 2,
-  //     content: 'note 2',
-  //     color: '#ffffcc', // yellow
-  //     position_x: 300,
-  //     position_y: 150
-  //   },
-  //   {
-  //     id: 3,
-  //     content: 'note 3',
-  //     color: '#ccffcc', // green
-  //     position_x: 500,
-  //     position_y: 200
-  //   },
-  //   {
-  //     id: 4,
-  //     content: 'note 4',
-  //     color: '#ccffff', // blue
-  //     position_x: 200,
-  //     position_y: 250
-  //   },
-  //   {
-  //     id: 5,
-  //     content: 'note 5',
-  //     color: '#ffffcc', // yellow
-  //     position_x: 1300,
-  //     position_y: 300
-  //   },
-  //   {
-  //     id: 6,
-  //     content: 'note 6',
-  //     color: '#ffccff', // pink
-  //     position_x: 1000,
-  //     position_y: 500
-  //   },
-  //   {
-  //     id: 7,
-  //     content: 'note 7',
-  //     color: '#ccffcc', // green
-  //     position_x: 1400,
-  //     position_y: 90
-  //   },
-  //   {
-  //     id: 8,
-  //     content: 'note 9',
-  //     color: '#ffccff', // pink
-  //     position_x: 950,
-  //     position_y: 280
-  //   },
-  //   {
-  //     id: 9,
-  //     content: 'note 10',
-  //     color: '#ccffff', // blue
-  //     position_x: 700,
-  //     position_y: 10
-  //   },
-  //   {
-  //     id: 10,
-  //     content: 'note 10',
-  //     color: '#ffffcc', // yellow
-  //     position_x: 1000,
-  //     position_y: 150
-  //   },
-  //   {
-  //     id: 11,
-  //     content: 'note 12',
-  //     color: '#ffccff', // pink
-  //     position_x: 780, 
-  //     position_y: 350
-  //   },
-  //   {
-  //     id: 12,
-  //     content: 'note 8',
-  //     color: '#f5f5f5', // white
-  //     position_x: 880,
-  //     position_y: 40
-  //   }
-  // ]);
-
-  // // Big prompt notes (like the white rectangles in your image)
-  // const prompts = [
-  //   {
-  //     id: 1,
-  //     content: 'Prompt note 1',
-  //     position_x: 150,
-  //     position_y: 180,
-  //     width: 180,
-  //     height: 220,
-  //     background: '#ffffcc', // yellow background
-  //     border: '3px solid #ffcc00' // yellow border
-  //   },
-  //   {
-  //     id: 2,
-  //     content: 'Prompt note 2',
-  //     position_x: 650,
-  //     position_y: 200,
-  //     width: 220,
-  //     height: 280,
-  //     background: '#ffccff', // pink background
-  //     border: '3px solid #ff66ff' // pink border
-  //   }
-  // ];
 
   const [notes, setNotes] = useState([]);
   const [prompts, setPrompts] = useState([]);
@@ -173,17 +38,22 @@ const PageBulletinBoard = () => {
     const fetchNotes = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/bulletin-board/notes');
+        console.log("Fetching notes from API...");
+        const response = await fetch('http://127.0.0.1:5000/api/bulletin-board/notes');
         
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         
         const data = await response.json();
+        console.log("API response data:", data);
         
         // Split notes into regular notes and prompts
         const fetchedPrompts = data.filter(note => note.is_prompt);
         const fetchedNotes = data.filter(note => !note.is_prompt);
+        
+        console.log("Filtered prompts:", fetchedPrompts);
+        console.log("Filtered notes:", fetchedNotes);
         
         setPrompts(fetchedPrompts);
         setNotes(fetchedNotes);
@@ -219,7 +89,14 @@ const PageBulletinBoard = () => {
       </div>
     );
   }
-// >>>>>>> origin/staging/integration
+
+  // Debug info - log exactly what we're about to render
+  console.log("About to render bulletin board with:", {
+    notesCount: notes.length,
+    promptsCount: prompts.length,
+    notes,
+    prompts
+  });
 
   return (
     <div className="bulletin-board">
@@ -229,7 +106,7 @@ const PageBulletinBoard = () => {
         <ClockIcon />
       </button>
 
-      <div className="board">
+      <div className="board" style={{ position: 'relative', minHeight: '600px', border: '1px solid #ccc' }}>
         {showClockOverlay && <ClockOverlay onClose={() => setShowClockOverlay(false)} />}
 
         <NavButtonBar />
@@ -242,10 +119,10 @@ const PageBulletinBoard = () => {
               position: 'absolute',
               left: `${prompt.position_x}px`,
               top: `${prompt.position_y}px`,
-              width: `${prompt.width}px`,
-              height: `${prompt.height}px`,
-              backgroundColor: prompt.background,
-              border: prompt.border,
+              width: '180px',
+              height: '220px',
+              backgroundColor: prompt.color || '#FFFFF3',
+              border: '3px solid #ffcc00',
               padding: '15px',
               display: 'flex',
               flexDirection: 'column',
@@ -253,7 +130,8 @@ const PageBulletinBoard = () => {
               alignItems: 'center',
               textAlign: 'center',
               boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-              zIndex: 5
+              transform: `rotate(${prompt.rotation || 0}deg)`,
+              zIndex: prompt.z_index || 5
             }}
           >
             {prompt.content}
@@ -271,7 +149,9 @@ const PageBulletinBoard = () => {
               top: `${note.position_y}px`,
               padding: '10px',
               borderRadius: '5px',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+              transform: `rotate(${note.rotation || 0}deg)`,
+              zIndex: note.z_index || 0
             }}
             onClick={handleNoteClick}
           >
