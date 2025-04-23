@@ -7,3 +7,4 @@ export { default as PageAbout }         from './page_about';
 export { default as HowTo }             from './page_how_to';
 export { default as ClockStats }        from './page_clock_stats';
 export { default as ViewNote }          from './page_view_note';
+export { default as WriteNote }          from './page_write_note';

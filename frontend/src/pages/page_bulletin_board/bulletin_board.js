@@ -3,28 +3,42 @@ import { NavButtonBar, ClockIcon } from '../../components';
 import './bulletin_board.css';
 import ClockOverlay from '../page_clock_stats/clock_stats';
 import ViewNoteOverlay from '../page_view_note/view_note';
+import WriteNoteOverlay from '../page_write_note/write_note';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+
+
+
 
 const PageBulletinBoard = () => {
   const [showClockOverlay, setShowClockOverlay] = useState(false);
   const [showNoteOverlay, setShowNoteOverlay] = useState(false);
+  const [showWriteOverlay, setShowWriteOverlay] = useState(false);
+  const [selectedNote, setSelectedNote] = useState(null);
 
-  const handleNoteClick = () => {
+  const isBoardClickable = !showClockOverlay && !showNoteOverlay && !showWriteOverlay;
+
+  const handleNoteClick = (note) => {
+    setSelectedNote(note);
     setShowNoteOverlay(true);
   };
 
+  const handleBoardClick = () => {
+    setShowWriteOverlay(true);
+  };
+
   const notes = [
-    { id: 1, content: 'note 1', color: '#ffd3b6', position_x: 100, position_y: 100 },
-    { id: 2, content: 'note 2', color: '#ffffcc', position_x: 300, position_y: 150 },
-    { id: 3, content: 'note 3', color: '#ccffcc', position_x: 500, position_y: 200 },
-    { id: 4, content: 'note 4', color: '#ccffff', position_x: 200, position_y: 250 },
-    { id: 5, content: 'note 5', color: '#ffffcc', position_x: 1300, position_y: 300 },
-    { id: 6, content: 'note 6', color: '#ffccff', position_x: 1000, position_y: 500 },
-    { id: 7, content: 'note 7', color: '#ccffcc', position_x: 1400, position_y: 90 },
-    { id: 8, content: 'note 9', color: '#ffccff', position_x: 950, position_y: 280 },
-    { id: 9, content: 'note 10', color: '#ccffff', position_x: 700, position_y: 10 },
-    { id: 10, content: 'note 10', color: '#ffffcc', position_x: 1000, position_y: 150 },
-    { id: 11, content: 'note 12', color: '#ffccff', position_x: 780, position_y: 350 },
-    { id: 12, content: 'note 8', color: '#ccffcc', position_x: 880, position_y: 40 }
+    { id: 1, header: 'note 1', body: 'first body', color: '#ffd3b6', position_x: 100, position_y: 100 },
+    { id: 2, header: 'note 2', body: 'second body', color: '#ffffcc', position_x: 300, position_y: 150 },
+    { id: 3, header: 'note 3', body: 'totally testing body', color: '#ccffcc', position_x: 500, position_y: 200 },
+    { id: 4, header: 'note 4', body: 'testing longer and longer messages body', color: '#ccffff', position_x: 200, position_y: 250 },
+    { id: 5, header: 'note 5', body: '.', color: '#ffffcc', position_x: 1300, position_y: 300 },
+    { id: 6, header: 'note 6', body: 'sixth body', color: '#ffccff', position_x: 1000, position_y: 500 },
+    { id: 7, header: 'note 7', body: 'seventh body', color: '#ccffcc', position_x: 1400, position_y: 90 },
+    { id: 8, header: 'note 8', body: 'trying to test really really long bodies to see if they look OK body', color: '#ffccff', position_x: 950, position_y: 280 },
+    { id: 9, header: 'note 9', body: 'ninth body', color: '#ccffff', position_x: 700, position_y: 10 },
+    { id: 10, header: 'note 10', body: 'Fully Puncuated And, Capitalized Body!', color: '#ffffcc', position_x: 1000, position_y: 150 },
+    { id: 11, header: 'note 11', body: 'eleventh body', color: '#ffccff', position_x: 780, position_y: 350 },
+    { id: 12, header: 'note 12', body: 'twelfth body', color: '#ccffcc', position_x: 880, position_y: 40 }
   ];
 
   const prompts = [
@@ -49,7 +63,7 @@ const PageBulletinBoard = () => {
       border: '3px solid #ff66ff'
     }
   ];
-
+  
   return (
     <div className="bulletin-board">
       <h1>Community Bulletin Board</h1>
@@ -58,9 +72,18 @@ const PageBulletinBoard = () => {
         <ClockIcon />
       </button>
 
-      <div className="board">
+      <div
+      className="board"
+      onClick={(e) =>{
+        if (isBoardClickable) {
+          handleBoardClick();
+          }
+      }}
+        style={{
+          cursor: !showClockOverlay && !showNoteOverlay ? 'crosshair' : 'default'
+      }}>
         {showClockOverlay && <ClockOverlay onClose={() => setShowClockOverlay(false)} />}
-
+        
         <NavButtonBar />
 
         {prompts.map(prompt => (
@@ -102,18 +125,31 @@ const PageBulletinBoard = () => {
               borderRadius: '5px',
               boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
             }}
-            onClick={handleNoteClick}
-          >
-            {note.content}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent board click
+              handleNoteClick(note);
+            }}
+            >
+            <strong>{note.header}</strong>
+            <p>{note.body}</p>
           </div>
         ))}
 
         
       </div>
-
-      {showNoteOverlay && (
-        <ViewNoteOverlay onClose={() => setShowNoteOverlay(false)} />
+      {showWriteOverlay && (
+        <WriteNoteOverlay onClose={() => setShowWriteOverlay(false)} />
       )}
+
+{showNoteOverlay && selectedNote && (
+  <ViewNoteOverlay
+    note={selectedNote}
+    onClose={() => {
+      setShowNoteOverlay(false);
+      setSelectedNote(null);
+    }}      
+    />
+    )}
     </div>
   );
 };
