@@ -6,7 +6,7 @@ import logo from './logo.svg';
 import { PageBulletinBoard, PagePersonalBoard, PageAbout, HowTo, ClockStats, ViewNote, WriteNote } from '../pages';
 
 function App() {
-  return (
+    return (
     <Router>
       <div className="App">
       <Switch>
