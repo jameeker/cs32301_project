@@ -4,7 +4,6 @@ import './bulletin_board.css';
 import ClockOverlay from '../page_clock_stats/clock_stats';
 import ViewNoteOverlay from '../page_view_note/view_note';
 import WriteNoteOverlay from '../page_write_note/write_note';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const PageBulletinBoard = () => {
   const [showClockOverlay, setShowClockOverlay] = useState(false);
