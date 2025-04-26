@@ -1,2 +1,0 @@
-note_id,content,color,format,created_at,expires_at,type,is_prompt,prompt_id,created_by,is_auto_generated
-1,This is a test sticky note!,#FEFF9C,text,2025-04-12 17:43:58,2025-04-13 17:43:58,sticky,0,,user-test-1,0

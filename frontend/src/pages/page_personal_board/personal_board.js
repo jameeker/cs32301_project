@@ -6,25 +6,29 @@ import './personal_board.css';
 
 // Import Background Images
 import bgWhite from '../../assets/backgrounds/background_white.jpg';
-import bgGrass from '../../assets/backgrounds/background_grass.jpg';
-import bgFern from '../../assets/backgrounds/background_fern.jpg';
 
-import bgCloudy from '../../assets/backgrounds/cloudy-day.webp';
-import bgBloom from '../../assets/backgrounds/full-bloom.webp';
-import bgPaper from '../../assets/backgrounds/seamless_paper_texture.webp';
-import bgGeom from '../../assets/backgrounds/geometry.webp';
-
+import bgSquiggles from '../../assets/backgrounds/pexels-dom-j-7304-310452.jpg';
+import bgSky from '../../assets/backgrounds/pexels-padrinan-19670.jpg';
+import bgDots from '../../assets/backgrounds/pexels-padrinan-255379.jpg';
+import bgPaint from '../../assets/backgrounds/pexels-steve-1269968.jpg';
+import bgRain from '../../assets/backgrounds/pexels-jplenio-2259232.jpg'
+import bgSoftWood from '../../assets/backgrounds/pexels-pixabay-301717.jpg'
+import bgYellowWood from '../../assets/backgrounds/pexels-pixabay-326347.jpg'
+import bgGrunge from '../../assets/backgrounds/pexels-timmossholder-936800.jpg'
 
 const backgrounds = [
+  bgSoftWood,
+  bgSquiggles,
+  bgSky,
   bgWhite,
-  bgCloudy,
-  bgBloom,
-  bgPaper,
-  bgGeom
+  bgDots,
+  bgPaint,
+  bgRain,
+  bgYellowWood,
+  bgGrunge
 ];
 
 const PagePersonalBoard = () => {
-  const [showOverlay, setShowOverlay] = useState(false);
   const [bgIndex, setBgIndex] = useState(0);
   const [showNoteOverlay, setShowNoteOverlay] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);

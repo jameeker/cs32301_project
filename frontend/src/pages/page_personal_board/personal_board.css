@@ -58,3 +58,13 @@ h1 {
 .bg-arrow-button:hover {
   transform: scale(1.1);
 }
+
+.trash-can {
+  background-color: #ffffff00;
+  border: none;
+  transform: scale(1.2);
+}
+
+.trash-can:hover {
+  transform: scale(1.4);
+}
