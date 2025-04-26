@@ -1,82 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Guide</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .navbar {
-            background: black;
-            color: white;
-            padding: 10px;
-            text-align: left;
-            font-size: 18px;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-        }
-        .header {
-            font-size: 32px;
-            font-weight: bold;
-        }
-        .content-box {
-            border: 2px solid black;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: left;
-        }
-        .image-section {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .icon {
-            width: 50px;
-            height: 50px;
-        }
-        .image-preview {
-            width: 600px;
-            height: auto;
-            border: 2px solid black;
-        }
-        .home-icon {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How to Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      background-color: #FFF9DB;
+    }
+    .navbar {
+      background: black;
+      color: white;
+      padding: 10px;
+      text-align: left;
+      font-size: 18px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+    .header {
+      font-size: 36px;
+      font-weight: bold;
+      margin: 30px 0;
+    }
+    .slider-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 40px;
+    }
+    .slider-image {
+      width: 90%;
+      max-width: 900px;
+      height: auto;
+      border: 3px solid black;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+    .slide-description {
+      margin-top: 20px;
+      font-size: 20px;
+      max-width: 850px;
+    }
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 48px;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 15px;
+      cursor: pointer;
+      z-index: 1;
+    }
+    .arrow-left {
+      left: 20px;
+    }
+    .arrow-right {
+      right: 20px;
+    }
+    .home-icon {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <div class="navbar">Main Bulletin Board</div>
-    <div class="container">
-        <div class="header">How to Guide</div>
-        <div class="content-box">
-            <p><strong>Introduction:</strong> This section contains information about how to use the platform...</p>
-            <p>Follow the steps carefully to navigate and use the features effectively.</p>
-        </div>
-        <div class="image-section">
-            <img src="pencil-icon.png" alt="Edit" class="icon">
-            <img src="screenshot-example.png" alt="Example Screenshot" class="image-preview">
-            <img src="zoom-icon.png" alt="Zoom" class="icon">
-        </div>
+  <div class="navbar">Main Bulletin Board</div>
+  <div class="container">
+    <div class="header">How to Guide</div>
+
+    <div class="slider-container">
+      <button class="arrow arrow-left" onclick="prevSlide()">&#8592;</button>
+      <img id="sliderImage" class="slider-image" src="PersonalBoard-howto.png" alt="Slide" />
+      <div id="slideDescription" class="slide-description">
+        This is your personal board where you can add custom prompts and notes by clicking on the board.
+      </div>
+      <button class="arrow arrow-right" onclick="nextSlide()">&#8594;</button>
     </div>
-    <img src="home-icon.png" alt="Home" class="home-icon" onclick="goHome()">
-    <script>
-        function goHome() {
-            window.location.href = 'index.html';
-        }
-    </script>
+  </div>
+
+  <img src="home-icon.png" alt="Home" class="home-icon" onclick="goHome()" />
+
+  <script>
+    const slides = [
+      {
+        src: "PersonalBoard-howto.png",
+        description: "This is your personal board where you can add custom prompts and notes by clicking on the board."
+      },
+      {
+        src: "ClockStatsOverlayPage-howto.png",
+        description: "The community bulletin operates on a 24 hour clock. Once the time runs out, the board is reset and new prompts and notes can be added!"
+      },
+      {
+        src: "AboutPage-howto.png",
+        description: "To learn more about the creators of this platform, check out the About Page!"
+      },
+      {
+        src: "trash-howto.png",
+        description: "By clicking on yes, you can choose to look through the trash for some interesting discarded notes."
+      },
+      {
+        src: "trash2-howto.png",
+        description: "By clicking on the trash, you can view and restore notes as you please. Click on the restored notes button to see all the notes collected from the trash."
+      }
+    ];
+
+    let currentSlide = 0;
+
+    function updateSlide() {
+      const imageElement = document.getElementById("sliderImage");
+      const descriptionElement = document.getElementById("slideDescription");
+      imageElement.src = slides[currentSlide].src;
+      descriptionElement.textContent = slides[currentSlide].description;
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      updateSlide();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      updateSlide();
+    }
+
+    function goHome() {
+      window.location.href = 'index.html';
+    }
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'ArrowRight') {
+        nextSlide();
+      } else if (event.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+  </script>
 </body>
 </html>
