@@ -2,11 +2,11 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import logo from './logo.svg';
-
-import { PageBulletinBoard, PagePersonalBoard, PageAbout, HowTo, ClockStats, ViewNote } from '../pages';
+// Importing Stuff
+import { PageBulletinBoard, PagePersonalBoard, PageAbout, HowTo, ClockStats, ViewNote, WriteNote } from '../pages';
 
 function App() {
-  return (
+    return (
     <Router>
       <div className="App">
       <Switch>
@@ -16,6 +16,7 @@ function App() {
           <Route path="/how-to" component={HowTo} />
           <Route path="/clock-stats" component={ClockStats} />
           <Route path="/view-note" component={ViewNote} />
+          <Route path="/write-note" component={WriteNote} />
         </Switch>
       </div>
     </Router>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trash - Note Found</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('trash-page2.png') no-repeat center center;
+      background-size: cover;
+      height: 100vh;
+      position: relative;
+      cursor: pointer;
+    }
+
+   
+    .sticky-note {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: auto;
+      z-index: 5;
+      display: none;
+    }
+
+    .note-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 15px;
+      text-align: center;
+      width: 200px;
+      color: black;
+      display: none;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .arrow-controls {
+      display: none;
+      position: absolute;
+      top: 80%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 36px;
+      z-index: 15;
+      color: white;
+      user-select: none;
+    }
+
+    .arrow-controls span {
+      margin: 0 20px;
+      cursor: pointer;
+    }
+
+    .home-icon {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      z-index: 20;
+    }
+
+    .about-help {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 20;
+    }
+
+    .about-help button {
+      padding: 6px 12px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+    }
+
+    .about-help button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body onclick="showStickyNote(event)">
+  
+  <img src="sticky-note.png" alt="Sticky Note" class="sticky-note" id="stickyNote" />
+
+  <!-- Text that appears on the sticky note -->
+  <div class="note-text" id="noteText">Hi my name is.</div>
+
+  <!-- Arrow Controls -->
+  <div class="arrow-controls" id="arrowControls">
+    <span onclick="prevNote(event)">&lt;</span>
+    <span onclick="nextNote(event)">&gt;</span>
+  </div>
+
+  <img src="home-icon.png" alt="Home" class="home-icon" onclick="goHome(event)" />
+
+  <!-- About & Help buttons -->
+  <div class="about-help">
+    <button onclick="goToHowTo(event)">Help</button>
+    <button onclick="goToGrid(event)">recovered notes</button>
+  </div>
+
+  <script>
+    const sticky = document.getElementById('stickyNote');
+    const noteText = document.getElementById('noteText');
+    const arrowControls = document.getElementById('arrowControls');
+
+    const notes = [
+      "Hi my name is.",
+      "Reminder: feed the raccoon.",
+      "“Two things are infinite:the universe and human stupidity; and I'm not sure about the universe.”―Albert Einstein"
+    ];
+    let currentIndex = 0;
+    let noteRevealed = false;
+
+    function showStickyNote(e) {
+      if (
+        e.target.closest('.about-help') ||
+        e.target.classList.contains('home-icon') ||
+        e.target.id === 'stickyNote' ||
+        e.target.closest('.arrow-controls')
+      ) return;
+
+      if (!noteRevealed) {
+        sticky.style.display = 'block';
+        noteText.style.display = 'block';
+        arrowControls.style.display = 'block';
+        noteText.innerText = notes[currentIndex];
+        noteRevealed = true;
+      }
+    }
+
+    function prevNote(e) {
+      e.stopPropagation();
+      currentIndex = (currentIndex - 1 + notes.length) % notes.length;
+      noteText.innerText = notes[currentIndex];
+    }
+
+    function nextNote(e) {
+      e.stopPropagation();
+      currentIndex = (currentIndex + 1) % notes.length;
+      noteText.innerText = notes[currentIndex];
+    }
+
+    function goHome(e) {
+      e.stopPropagation();
+      window.location.href = 'index.html';
+    }
+
+    function goToHowTo(e) {
+      e.stopPropagation();
+      window.location.href = 'how-to.html';
+    }
+  </script>
+</body>
+</html>
