@@ -1,18 +1,18 @@
 import React from 'react';
-import { HomeButton, NavButtonBar, ClockIcon } from '../../components';
-import "./view_note.css";
+import './view_note.css';
 
-const NoteOverlay = ({ onClose, note }) => {
+const ViewNoteOverlay = ({ note, onClose }) => {
+  if (!note) return null; // Don't render anything if no note is provided
+
   return (
     <div className="overlay">
-      <div className={`modal sticky-note ${note?.color || 'yellow'}`}>
-        <div className="pin" />
-        <h2 className="note-title">{note?.title || "Note Title"}</h2>
-        <p className="note-text">{note?.text || "Note content goes here."}</p>
+      <div className="note-modal" style={{ backgroundColor: note.color }}>
         <div className="close-x" onClick={onClose}>×</div>
+        <h2 className="note-header">{note.header}</h2>
+        <p className="note-body">{note.body}</p>
       </div>
     </div>
   );
 };
 
-export default NoteOverlay;
+export default ViewNoteOverlay;

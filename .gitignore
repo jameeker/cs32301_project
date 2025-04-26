@@ -51,6 +51,5 @@ yarn-error.log*
 
 # files
 tree_structure.txt
-project_structure.txt
 .env
 # __init__.py

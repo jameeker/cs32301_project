@@ -7,6 +7,7 @@ const ClockOverlay = ({ onClose }) => {
     <div className="overlay">
       <div className="modal">
       <h2 className="title">Time Remaining</h2>
+      <h3 className="timer">24:00:00</h3>
       <ClockIcon/> {}
         <p className="description">The Clock is ticking. 
           Impermanence is one of __WEBSITE NAME__’s core values, as after 24 hours, 

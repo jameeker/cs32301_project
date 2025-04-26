@@ -43,7 +43,14 @@
   text-align: center;
 }
 
-.note-text {
+.note-header {
+  margin-top: 10px;
+  white-space: pre-wrap;
+  font-size: 16px;
+  user-select: text;  
+}
+
+.note-body {
   margin-top: 10px;
   white-space: pre-wrap;
   font-size: 16px;

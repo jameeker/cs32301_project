@@ -4,8 +4,8 @@ from flask import Blueprint, jsonify
 how_to = Blueprint('how_to', __name__, url_prefix='/api/how-to')
 
 # Get how-to information
-@how_to.route('', methods=['GET']) # Endpoint
-def get_how_to(): # Function that I need
+@how_to.route('', methods=['GET'])
+def get_how_to():
     how_to_info = {
         'steps': [
             'Click on the bulletin board to add a new note',
