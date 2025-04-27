@@ -23,7 +23,8 @@ h1 {
   width: 85%;
   height: calc(100% - 200px);
   margin: 0 auto;
-  background-color: #dfd8cf; /* Cork board color */
+  /* background-color: #dfd8cf; /* Cork board color */
+  background-color: #ffffff;
   border: 15px solid #844111; /* Wooden frame */
   outline: 2px solid black;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -118,4 +119,3 @@ h1 {
   color: black;
   cursor: pointer;
 }
-
