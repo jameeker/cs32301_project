@@ -1,7 +1,7 @@
 import React from 'react';
 import './view_note.css';
 
-const ViewNoteOverlay = ({ note, onClose }) => {
+const ViewNoteOverlay = ({ note, onClose, onArchive }) => {
   if (!note) return null; // Don't render anything if no note is provided
 
   // Parse the content in case it has a header and body separated by newlines
@@ -21,12 +21,24 @@ const ViewNoteOverlay = ({ note, onClose }) => {
     }
   }
 
+  // Handle archive button click
+  const handleArchive = () => {
+    if (onArchive) {
+      onArchive(note);
+    }
+  };
+
   return (
     <div className="overlay">
       <div className="note-modal" style={{ backgroundColor: note.color }}>
         <div className="close-x" onClick={onClose}>×</div>
         {displayHeader && <h2 className="note-header">{displayHeader}</h2>}
         <p className="note-body">{displayBody}</p>
+        
+        {/* Archive button - same positioning as save button in write_note.js */}
+        <button className="archive-button" onClick={handleArchive}>
+          Archive
+        </button>
       </div>
     </div>
   );

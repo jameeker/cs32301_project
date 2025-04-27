@@ -190,6 +190,41 @@ const PageBulletinBoard = () => {
       alert("Failed to save your note. Please try again.");
     }
   };
+  
+  // Archive a note (save to personal board)
+  const archiveNote = async (note) => {
+    try {
+      console.log("Archiving note:", note);
+      
+      // The backend requires a user_id field
+      const dataToSend = {
+        user_id: 'system_user', // Use the same system user as when creating notes
+        position_x: note.position_x / 1000, // Convert back to 0-1 range
+        position_y: note.position_y / 500   // Convert back to 0-1 range
+      };
+      
+      console.log("Archive data sending:", dataToSend);
+      
+      const response = await fetch(`/api/bulletin-board/notes/${note.id}/save`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log("Note archived successfully:", data);
+      alert("Note saved to your personal board!");
+    } catch (err) {
+      console.error("Error archiving note:", err);
+      alert("Failed to archive note. Please try again.");
+    }
+  };
 
   // Effect hook to fetch notes data when component mounts
   useEffect(() => {
@@ -354,7 +389,12 @@ const PageBulletinBoard = () => {
           onClose={() => {
             setShowNoteOverlay(false);
             setSelectedNote(null);
-          }}      
+          }}
+          onArchive={(note) => {
+            archiveNote(note);
+            setShowNoteOverlay(false);
+            setSelectedNote(null);
+          }}
         />
       )}
     </div>

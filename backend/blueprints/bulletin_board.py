@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from datetime import datetime, date
-from database.db import get_db, create_new_note, get_public_notes, save_note_to_personal
+from database.db import get_db, create_new_note, get_public_notes, save_note_to_personal, Note, NoteState
 
 # Create the blueprint
 bulletin_board = Blueprint('bulletin_board', __name__, url_prefix='/api/bulletin-board')
@@ -188,8 +188,16 @@ def save_note(note_id):
     
     try:
         db = get_db()
-        user_id = data.get('user_id', 'anonymous')
+        user_id = data.get('user_id', 'system_user')  # Default to system_user
         
+        print(f"Attempting to save note {note_id} to personal board for user {user_id}")
+        print(f"Data received: {data}")
+        
+        # Ensure note_id is valid by checking if the note exists
+        note_exists = db.query(Note).filter(Note.note_id == note_id).first()
+        if not note_exists:
+            return jsonify({"error": f"Note with ID {note_id} not found"}), 404
+            
         # Save note to personal board
         state = save_note_to_personal(
             db=db,
@@ -199,12 +207,15 @@ def save_note(note_id):
             position_y=data.get('position_y', 0.5)
         )
         
+        print(f"Note successfully saved to personal board: {state}")
+        
         return jsonify({
             "status": "Note saved to personal board",
             "note_id": note_id,
             "user_id": user_id
         }), 200
     except Exception as e:
+        print(f"Error saving note to personal board: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 # Update an existing note
