@@ -1,32 +1,70 @@
-.nav-button-bar {
+
+.book-nav {
   position: fixed;
-  bottom: 10px;
-  right: 10px;
-  display: flex;
-  gap: 5px;
+  bottom: 5%;
+  right: 110px;
+  z-index: 999;
 }
 
-.nav-button {
-  padding: 6px 15px;
-  border: 1px solid #cccccc;
-  background-color: #ffffff;
-  color: #333333;
-  font-size: 18px;
-  font-weight: bold;
+.book-icon {
+  width: 120px;
+  height: 120px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: all 0.3s ease;
+  position: relative;
+  bottom: 0;
+  right: 30%;
   cursor: pointer;
-  transition: background-color 0.2s;
-  border-radius: 2px;
-  box-shadow: none;
+  z-index: 1;
 }
 
-.about-button {
-  background-color: #ffffff;
+
+.book-tab {
+  position: absolute;
+  background: #ffffcc;
+  border: 2px solid #000000;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 6px;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 1;
+  transition: width 0.3s ease, z-index 0.2s ease;
+  opacity: 1;
 }
 
-.how-to-button {
-  background-color: #ffffff;
+.book-tab:hover {
+  width: 130px;
+  background: #fffacd;
+  font-weight: bold;
+  z-index: 999;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
-.nav-button:hover {
-  background-color: #e0e0e0;
+.book-tab .label{
+  opacity: 0;
+}
+
+.book-icon:hover .book-tab {
+  width: 120px;
+}
+
+.book-icon:hover .book-tab {
+  transform: translateX(0);
+}
+
+.tab-label {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: black;
+}
+
+.book-tab:hover .tab-label,
+.book-icon:hover .tab-label {
+  opacity: 1;
 }

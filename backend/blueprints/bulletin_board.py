@@ -10,6 +10,10 @@ last_reset_date = date.today()
 
 #last_reset_date = date(2025, 1, 1) # Used to test the check_for_reset() by setting the last_reset_date to an earlier date
 
+@bulletin_board.route('/test', methods=['GET'])
+def test_endpoint():
+    return jsonify({"status": "success", "message": "Bulletin board API is working"})
+
 # Temporary note storage (will be replaced with database models later)
 notes = [
     {
@@ -69,51 +73,83 @@ default_prompts = [
 # Note FUNCTIONS:
 #####################################################
 
+# Initial function to test with Postman 
+@bulletin_board.route('/notes', methods=['GET']) # API endpoints
+def get_all_public_notes():
+    db = get_db()
+    notes_with_states = get_public_notes(db)
+    
+    # Transform SQLAlchemy objects to JSON-serializable dictionaries
+    result = []
+    for note, state in notes_with_states:
+        result.append({
+            'id': note.note_id,
+            'content': note.content,
+            'color': note.color,
+            'type': note.type,
+            'is_prompt': note.is_prompt,
+            'position_x': state.position_x * 1000,  # Convert from 0-1 range to pixels
+            'position_y': state.position_y * 500,   # Adjust multiplier based on your board size
+            'rotation': state.rotation,
+            'z_index': state.z_index
+        })
+    
+    return jsonify(result)
+
 # Get community notes
 # Checks if its time for a board reset every time this is called
-@bulletin_board.route('/notes', methods=['GET'])
-def get_community_notes():
-    check_for_reset()
-    return jsonify(notes)
+# @bulletin_board.route('/notes', methods=['GET'])
+# def get_community_notes():
+#     check_for_reset()
+#     return jsonify(notes)
 
-# # Create a new note
-# @bulletin_board.route('/notes', methods=['POST'])
-# def create_note():
-#     data = request.json
-    
-#     # Simple validation
-#     if not data or 'content' not in data:
-#         return jsonify({"error": "Content is required"}), 400
-    
-#     # Create a new note
-#     new_note = {
-#         'id': len(notes) + 1,
-#         'content': data['content'],
-#         'color': data.get('color', '#ffd3b6'),
-#         'position_x': data.get('position_x', 0),
-#         'position_y': data.get('position_y', 0),
-#         'created_at': datetime.utcnow().isoformat()
-#     }
-    
-#     notes.append(new_note)
-#     return jsonify(new_note), 201
-
-notes_bp = Blueprint('notes', __name__)
-
-@notes_bp.route('/notes', methods=['POST'])
+# Create a new note
+@bulletin_board.route('/notes', methods=['POST'])
 def create_note():
     data = request.json
-    db = get_db()  # Get database session
     
-    # Use the helper function from db.py
-    new_note = create_new_note(
-        db=db,
-        content=data['content'],
-        user_id=data['user_id'],
-        color=data.get('color', 'yellow')
-    )
+    # Simple validation
+    if not data or 'content' not in data:
+        return jsonify({"error": "Content is required"}), 400
     
-    return jsonify({"note_id": new_note.note_id}), 201
+    try:
+        db = get_db()
+        user_id = data.get('user_id', 'anonymous')
+        
+        # Use the helper function from db.py
+        new_note = create_new_note(
+            db=db,
+            content=data['content'],
+            user_id=user_id,
+            color=data.get('color', 'yellow'),
+            is_prompt=data.get('is_prompt', False)
+        )
+        
+        return jsonify({
+            "id": new_note.note_id,
+            "content": new_note.content,
+            "status": "Note created successfully"
+        }), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# This blueprint is not being used - leaving it here for reference
+notes_bp = Blueprint('notes', __name__)
+
+# @notes_bp.route('/notes', methods=['POST'])
+# def create_note_in_notes_bp():
+#     data = request.json
+#     db = get_db()  # Get database session
+#     
+#     # Use the helper function from db.py
+#     new_note = create_new_note(
+#         db=db,
+#         content=data['content'],
+#         user_id=data['user_id'],
+#         color=data.get('color', 'yellow')
+#     )
+#     
+#     return jsonify({"note_id": new_note.note_id}), 201
 
 @notes_bp.route('/notes/public', methods=['GET'])
 def get_public_board():
@@ -136,22 +172,31 @@ def get_public_board():
     
     return jsonify(result)
 
-@notes_bp.route('/notes/<int:note_id>/save', methods=['POST'])
+# Save a note to personal board
+@bulletin_board.route('/notes/<int:note_id>/save', methods=['POST'])
 def save_note(note_id):
     data = request.json
-    db = get_db()
     
-    # Save note to personal board
-    state = save_note_to_personal(
-        db=db,
-        note_id=note_id,
-        user_id=data['user_id'],
-        position_x=data.get('position_x', 0.5),
-        position_y=data.get('position_y', 0.5)
-    )
-    
-    notes.append(new_note)
-    return jsonify(new_note), 201
+    try:
+        db = get_db()
+        user_id = data.get('user_id', 'anonymous')
+        
+        # Save note to personal board
+        state = save_note_to_personal(
+            db=db,
+            note_id=note_id,
+            user_id=user_id,
+            position_x=data.get('position_x', 0.5),
+            position_y=data.get('position_y', 0.5)
+        )
+        
+        return jsonify({
+            "status": "Note saved to personal board",
+            "note_id": note_id,
+            "user_id": user_id
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Update an existing note
 @bulletin_board.route('/notes/<int:note_id>', methods=['PATCH'])

@@ -7,7 +7,6 @@ from blueprints.bulletin_board import bulletin_board
 from blueprints.personal_board import personal_board
 from blueprints.about import about
 from blueprints.how_to import how_to
-from blueprints.community_stats import community_stats
 
 def create_app(config_class=Config):
     # Initialize Flask app
@@ -15,15 +14,14 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     
     # Enable CORS
-    CORS(app)
+    # CORS(app)
+    CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:3000"}})
     
     # Register blueprints
     app.register_blueprint(bulletin_board)
     app.register_blueprint(personal_board)
     app.register_blueprint(about)
     app.register_blueprint(how_to)
-    app.register_blueprint(community_stats)
-
     
     # Define routes
     @app.route('/')
@@ -32,14 +30,11 @@ def create_app(config_class=Config):
             "name": "Bulletin Board API",
             "version": "1.0.0",
             "endpoints": {
-                "bulletin_board_notes": "/api/bulletin-board/notes",
-                "bulletin_board_prompts": "/api/bulletin-board/prompts",
+                "bulletin_board": "/api/bulletin-board/notes",
                 "personal_board": "/api/personal-board/notes",
                 "about": "/api/about",
                 "how_to": "/api/how-to",
-                "health": "/api/health",
-                "community_stats": "/api/community-stats"
-
+                "health": "/api/health"
             },
             "status": "running"
         }
@@ -49,10 +44,6 @@ def create_app(config_class=Config):
         return {"status": "healthy"}
     
     return app
-
-
-app = Flask(__name__)
-app.register_blueprint(community_stats)
 
 if __name__ == '__main__':
     app = create_app()
