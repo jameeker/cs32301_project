@@ -1,8 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HomeButton, NavButtonBar } from '../../components';
 import './how_to.css';
 
 const HowTo = () => {
+<<<<<<< HEAD
+
+  useEffect(() => {
+    // Fetch how-to data if needed
+    const fetchHowToData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/api/how-to');
+        if (response.ok) {
+          const data = await response.json();
+          console.log("How-to data:", data);
+          // You can set state with the data here if needed
+        }
+      } catch (error) {
+        console.error("Error fetching how-to data:", error);
+      }
+    };
+    
+    // Uncomment to enable API fetch
+    // fetchHowToData();
+  }, []);
+
+=======
+>>>>>>> dev/frontend
   return (
     <div className="howto-page">
       <h1>How to Use the Bulletin Board</h1>
@@ -19,6 +42,11 @@ const HowTo = () => {
       <NavButtonBar />
     </div>
   );
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> dev/frontend
 };
 
 export default HowTo;
