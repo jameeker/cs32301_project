@@ -41,7 +41,10 @@ h1 {
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
   border-radius: 2px;
   border: 2px solid #000000;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-family: "Atkinson Hyperlegible Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
   transform: rotate(-3deg);
   cursor: pointer;
   transition: transform 0.2s;

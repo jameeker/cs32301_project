@@ -325,7 +325,10 @@ const PageBulletinBoard = () => {
                 transform: `rotate(${note.rotation || 0}deg)`, // Optional rotation
                 zIndex: note.z_index || 0 // Z-index for stacking order
               }}
-              onClick={() => handleNoteClick(note)}
+              onClick={(e) => {
+              e.stopPropagation(); // Prevent click from reaching the board
+              handleNoteClick(note);
+            }}
             >
               {note.content}
             </div>
