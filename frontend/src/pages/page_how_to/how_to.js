@@ -3,7 +3,6 @@ import { HomeButton, NavButtonBar } from '../../components';
 import './how_to.css';
 
 const HowTo = () => {
-<<<<<<< HEAD
 
   useEffect(() => {
     // Fetch how-to data if needed
@@ -24,8 +23,6 @@ const HowTo = () => {
     // fetchHowToData();
   }, []);
 
-=======
->>>>>>> dev/frontend
   return (
     <div className="howto-page">
       <h1>How to Use the Bulletin Board</h1>
@@ -42,11 +39,6 @@ const HowTo = () => {
       <NavButtonBar />
     </div>
   );
-<<<<<<< HEAD
-
-
-=======
->>>>>>> dev/frontend
 };
 
 export default HowTo;
