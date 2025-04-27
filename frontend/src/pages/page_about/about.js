@@ -8,7 +8,7 @@ import sideImg2 from '../../assets/about2.jpg';
 const rawNames = [
   'Will Allen',
   'Jack Miller',
-  'Jamie Meeker',
+  'Jaime Meeker',
   'Maha Shakshuki',
   'Isra Shaikh'
 ];
@@ -52,7 +52,7 @@ const PageAbout = () => {
     <div className="about-page">
       <NavButtonBar />
       <div className="about-header">
-        <h1>About __WEBSITE NAME__</h1>
+        <h1>About our-notes.com</h1>
         <img src={logoImg} alt="logo" className="about-logo-inline" />
         </div>
 
@@ -85,10 +85,10 @@ const PageAbout = () => {
             Everything on the board expires after 24 hours, ensuring a fresh and comfortable space for interaction.
           </p>
           <p>
-            Bulletin Boards can be found in just about any public space: libraries, coffee shops, & more. They serve to allow communities to communicate directly with one another, and can quickly be flooded with overlapped papers. With <strong>__WEBSITE NAME__</strong>, you can communicate anonymously on a virtual Bulletin Board. Daily prompts will be generated on pieces of paper, which may act as a discussion starter, or you may choose to ignore them and submit an unrelated note.
+            Bulletin Boards can be found in just about any public space: libraries, coffee shops, & more. They serve to allow communities to communicate directly with one another, and can quickly be flooded with overlapped papers. With <strong>our-notes.com</strong>, you can communicate anonymously on a virtual Bulletin Board. Daily prompts will be generated on pieces of paper, which may act as a discussion starter, or you may choose to ignore them and submit an unrelated note.
           </p>
           <p>
-            Impermanence is one of <strong>__WEBSITE NAME__</strong>’s core values, as after 24 hours, all of the notes on the board will be reset, and new prompts will be posted. However, you can save any notes you’d like to your personal board to keep them for future reference.
+            Impermanence is one of <strong>our-notes.com</strong>'s core values, as after 24 hours, all of the notes on the board will be reset, and new prompts will be posted. However, you can save any notes you'd like to your personal board to keep them for future reference.
           </p>
         </div>
 

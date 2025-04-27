@@ -201,7 +201,8 @@ const PageBulletinBoard = () => {
         style={{ 
           position: 'relative', 
           minHeight: '600px',
-          cursor: !showClockOverlay && !showNoteOverlay ? 'crosshair' : 'default'
+          cursor: !showClockOverlay && !showNoteOverlay ? 'crosshair' : 'default',
+          backgroundColor: '#ffffff'
         }}
         onLoad={updateBoardDimensions}
         onClick={(e) => {
