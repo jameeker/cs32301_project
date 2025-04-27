@@ -3,10 +3,29 @@ import './write_note.css';
 
 const presetColors = ['#ffffcc', '#ccffcc', '#ccffff', '#ffccff'];
 
-const PageWriteNote = ({ onClose }) => {
+const PageWriteNote = ({ onClose, position, onSave }) => {
   const [header, setHeader] = useState('');
   const [body, setBody] = useState('');
   const [color, setColor] = useState(presetColors[0]);
+
+  const handleSave = () => {
+    // Make sure we have some content to save
+    if (!header && !body) {
+      alert("Please add some content to your note before saving.");
+      return;
+    }
+
+    // Package note data
+    const noteData = {
+      content: header ? `${header}\n\n${body}` : body, // Combine header and body
+      color: color,
+      position_x: position ? position.x : 0.5,
+      position_y: position ? position.y : 0.5
+    };
+    
+    // Call the onSave callback with the note data
+    onSave(noteData);
+  };
 
   return (
     <div className="overlay">
@@ -38,6 +57,11 @@ const PageWriteNote = ({ onClose }) => {
             />
           ))}
         </div>
+        
+        {/* Add save button */}
+        <button className="save-button" onClick={handleSave}>
+          Save
+        </button>
       </div>
     </div>
   );

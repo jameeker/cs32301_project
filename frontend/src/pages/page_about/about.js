@@ -57,7 +57,7 @@ const PageAbout = () => {
         </div>
 
       <div className="about-content">
-        <div className="about-board">
+        <div className="about-board" style={{ backgroundColor: '#ffffff' }}>
         <div className="about-notes">
             {notes.map(note => (
               <div

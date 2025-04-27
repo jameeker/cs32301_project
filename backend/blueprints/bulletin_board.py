@@ -114,7 +114,14 @@ def create_note():
     
     try:
         db = get_db()
-        user_id = data.get('user_id', 'anonymous')
+        
+        # Use a default user_id
+        user_id = 'system_user'  # Use a system user that exists in the database
+        # user_id = data.get('user_id', 'anonymous')
+        
+        # Extract position data from the request
+        position_x = data.get('position_x', 500) / 1000.0  # Convert from pixels to 0-1 range
+        position_y = data.get('position_y', 250) / 500.0   # Convert from pixels to 0-1 range
         
         # Use the helper function from db.py
         new_note = create_new_note(
@@ -122,7 +129,9 @@ def create_note():
             content=data['content'],
             user_id=user_id,
             color=data.get('color', 'yellow'),
-            is_prompt=data.get('is_prompt', False)
+            is_prompt=data.get('is_prompt', False),
+            position_x=position_x,
+            position_y=position_y
         )
         
         return jsonify({

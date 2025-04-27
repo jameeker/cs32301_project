@@ -63,6 +63,7 @@ const PageBulletinBoard = () => {
   const [loading, setLoading] = useState(true); // Loading indicator
   const [error, setError] = useState(null); // Error message if fetch fails
   const [boardDimensions, setBoardDimensions] = useState({ width: 0, height: 0 });
+  const [clickPosition, setClickPosition] = useState({ x: 0.5, y: 0.5 });
   
   // Reference to the board element for measuring dimensions
   const boardRef = useRef(null);
@@ -87,7 +88,16 @@ const PageBulletinBoard = () => {
     setShowNoteOverlay(true);
   };
 
-  const handleBoardClick = () => {
+  const handleBoardClick = (e) => {
+    // Calculate position relative to board (0-1 range)
+    if (boardRef.current) {
+      const rect = boardRef.current.getBoundingClientRect();
+      const posX = (e.clientX - rect.left) / rect.width;
+      const posY = (e.clientY - rect.top) / rect.height;
+      
+      // Store position for use when creating note
+      setClickPosition({ x: posX, y: posY });
+    }
     setShowWriteOverlay(true);
   };
 
@@ -104,15 +114,8 @@ const PageBulletinBoard = () => {
     };
   }, []);
 
-  // Effect hook to fetch notes data when component mounts
-  useEffect(() => {
-    /**
-     * Fetches notes from the API endpoint
-     * - Uses the proxy setting in package.json to route to backend
-     * - Separates notes and prompts based on is_prompt flag
-     * - Updates state with fetched data or error message
-     */
-    const fetchNotes = async () => {
+  // Function to fetch notes from the API
+  const fetchNotes = async () => {
       try {
         setLoading(true);
         console.log("Fetching notes from API...");
@@ -151,6 +154,45 @@ const PageBulletinBoard = () => {
       }
     };
 
+  // Save a note to the API
+  const saveNote = async (noteData) => {
+    try {
+      console.log("Saving note with data:", noteData);
+      
+      // Convert position values from 0-1 range to pixels (as expected by backend)
+      const dataToSend = {
+        content: noteData.content,
+        color: noteData.color,
+        position_x: noteData.position_x * 1000, // Convert to pixels
+        position_y: noteData.position_y * 500   // Convert to pixels
+        // Removed user_id field - let the backend handle it
+      };
+      
+      const response = await fetch('/api/bulletin-board/notes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log("Note saved successfully:", data);
+      
+      // Refresh notes to show the newly created note
+      fetchNotes();
+    } catch (err) {
+      console.error("Error saving note:", err);
+      alert("Failed to save your note. Please try again.");
+    }
+  };
+
+  // Effect hook to fetch notes data when component mounts
+  useEffect(() => {
     // Execute the fetch function when component mounts
     fetchNotes();
   }, []); // Empty dependency array means this effect runs once on component mount
@@ -207,7 +249,7 @@ const PageBulletinBoard = () => {
         onLoad={updateBoardDimensions}
         onClick={(e) => {
           if (isBoardClickable) {
-            handleBoardClick();
+            handleBoardClick(e);
           }
         }}
       >
@@ -293,7 +335,14 @@ const PageBulletinBoard = () => {
 
       {/* Conditional rendering of other overlays */}
       {showWriteOverlay && (
-        <WriteNoteOverlay onClose={() => setShowWriteOverlay(false)} />
+        <WriteNoteOverlay 
+          position={clickPosition}
+          onClose={() => setShowWriteOverlay(false)} 
+          onSave={(noteData) => {
+            saveNote(noteData);
+            setShowWriteOverlay(false);
+          }}
+        />
       )}
 
       {showNoteOverlay && selectedNote && (

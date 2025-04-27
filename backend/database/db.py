@@ -92,7 +92,7 @@ def get_db():
         db.close()
 
 # Database operations - Simple functions for common tasks ######################################################
-def create_new_note(db, content, user_id, color="yellow", is_prompt=False, prompt_id=None):
+def create_new_note(db, content, user_id, color="yellow", is_prompt=False, prompt_id=None, position_x=0.5, position_y=0.5):
     """Create a new note and add it to the public board"""
     # Create the note object - this is using the SQLAlchemy ORM
     new_note = Note.create(
@@ -110,13 +110,27 @@ def create_new_note(db, content, user_id, color="yellow", is_prompt=False, promp
     # Create public state for the note
     public_state = NoteState(
         note_id=new_note.note_id,
-        state="public"
+        state="public",
+        position_x=position_x,
+        position_y=position_y
     )
     db.add(public_state)
     
     # Update user's last active timestamp
     user = db.query(User).filter(User.user_id == user_id).first()
-    user.last_active = datetime.utcnow()
+    
+    # If user exists, update timestamp - if not, create a user
+    if user:
+        user.last_active = datetime.utcnow()
+    else:
+        # Create a temporary user if it doesn't exist (for anonymous notes)
+        new_user = User(
+            user_id=user_id,
+            session_token=f"temp-{datetime.utcnow().timestamp()}",
+            user_agent="Anonymous",
+            ip_hash="anonymous"
+        )
+        db.add(new_user)
     
     # Save all changes
     db.commit()

@@ -1,3 +1,13 @@
+`frontend/src/index.js`: main entry point of our React app.
+ 
+`frontend/src/App.js`: main application component that is the container holding all other components. 
+
+Try these tree commands:  
+`tree -I 'node_modules|build|.git|.next|dist|coverage' -L 5 -o tree_structure.txt`
+
+`tree -I 'node_modules|build|.git|.next|dist|coverage' -L 3 -o tree_structure.txt`
+
+```
 .
 ├── backend
 │   ├── __pycache__
@@ -117,3 +127,4 @@
 └── tree_structure.txt
 
 28 directories, 89 files
+```
