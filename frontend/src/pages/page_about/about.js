@@ -73,7 +73,7 @@ const PageAbout = () => {
                   minHeight: '100px',
                   borderRadius: '4px',
                   boxShadow: '2px 2px 6px rgba(0,0,0,0.2)',
-                  fontFamily: "'Comic Sans MS', cursive"
+                  fontFamily: "Atkinson Hyperlegible Mono"
                 }}
               >
                 {note.content}
