@@ -16,6 +16,20 @@ config.read(ini_path)
 DATABASE_URL = config['DEFAULT']['database']
 
 # Create a SQLAlchemy engine which connects to the hic_project MySQL database
+# Adjust pool settings to prevent connection timeouts
+# - pool_pre_ping: Test connections before use
+# - pool_recycle: Recycle connections after 3600 seconds (1 hour)
+# - pool_size: Increase max connections
+# - max_overflow: Allow more overflow connections
+# - pool_timeout: Longer timeout when waiting for connection
+# engine = create_engine(
+#     DATABASE_URL,
+#     pool_pre_ping=True,  # Test connection before use to avoid stale connections
+#     pool_recycle=3600,   # Recycle connections after 1 hour
+#     pool_size=20,        # Increase from default 5
+#     max_overflow=20,     # Increase from default 10
+#     pool_timeout=60      # Increase timeout to 60 seconds
+# )
 engine = create_engine(DATABASE_URL)
 
 # Create session factory - this lets you create sessions to talk to the database

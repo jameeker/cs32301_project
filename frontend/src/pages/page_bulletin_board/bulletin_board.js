@@ -52,6 +52,40 @@ import ViewNoteOverlay from '../page_view_note/view_note';
 import WriteNoteOverlay from '../page_write_note/write_note';
 
 const PageBulletinBoard = () => {
+  // Default hard-coded prompts that will always appear on the board
+  const defaultPrompts = [
+    {
+      id: 'default-1',
+      content: "TODAY'S MUSIC REC's",
+      color: "#FFFFF3",
+      position_x: 70,
+      position_y: 150,
+      is_prompt: true,
+      rotation: 0,
+      z_index: 5
+    },
+    {
+      id: 'default-2',
+      content: "Write a new part of a story from the notes around you.",
+      color: "#FFFFF3",
+      position_x: 825,
+      position_y: 300,
+      is_prompt: true,
+      rotation: 0,
+      z_index: 5
+    },
+    {
+      id: 'default-3',
+      content: "Share your most random thought.",
+      color: "#FFFFF3",
+      position_x: 600,
+      position_y: 50,
+      is_prompt: true,
+      rotation: 0,
+      z_index: 5
+    }
+  ];
+
   const [showClockOverlay, setShowClockOverlay] = useState(false);
   const [showNoteOverlay, setShowNoteOverlay] = useState(false);
   const [showWriteOverlay, setShowWriteOverlay] = useState(false);
@@ -59,7 +93,7 @@ const PageBulletinBoard = () => {
 
   // State for storing notes data and UI states
   const [notes, setNotes] = useState([]); // Regular notes
-  const [prompts, setPrompts] = useState([]); // Prompt notes
+  const [prompts, setPrompts] = useState(defaultPrompts); // Initialize with default prompts
   const [loading, setLoading] = useState(true); // Loading indicator
   const [error, setError] = useState(null); // Error message if fetch fails
   const [boardDimensions, setBoardDimensions] = useState({ width: 0, height: 0 });
@@ -141,8 +175,12 @@ const PageBulletinBoard = () => {
         console.log("Filtered prompts:", fetchedPrompts);
         console.log("Filtered notes:", fetchedNotes);
         
+        // Add any prompts from API to our default prompts
+        // This ensures we always show at least the default prompts
+        const allPrompts = [...defaultPrompts, ...fetchedPrompts];
+        
         // Update state with the fetched data
-        setPrompts(fetchedPrompts);
+        setPrompts(allPrompts);
         setNotes(fetchedNotes);
       } catch (err) {
         // Handle any errors that occurred during fetch

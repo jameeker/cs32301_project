@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from config import Config
+from database.db import get_db, create_new_note, Note
 
 # Import blueprints
 from blueprints.bulletin_board import bulletin_board

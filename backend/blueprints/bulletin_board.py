@@ -30,24 +30,27 @@ notes = [
 prompts = [
     {
         'id': 1,
-        'content': "What’s on your mind today?",
+        'content': "What's on your mind today?",
         'color': "#FFFFF3",
         'position_x': 50,
-        'position_y': 100
+        'position_y': 100,
+        'is_prompt': True
     },
     {
         'id': 2,
         'content': "Write the world a story!",
         'color': "#FFFFF3",
         'position_x': 200,
-        'position_y': 100
+        'position_y': 100,
+        'is_prompt': True
     },
     {
         'id': 3,
         'content': "Share a random thought.",
         'color': "#FFFFF3",
         'position_x': 350,
-        'position_y': 100
+        'position_y': 100,
+        'is_prompt': True
     }
 ]
 
@@ -58,14 +61,16 @@ default_prompts = [
         'content': "DEFAULT PROMPT 1. (should be put into prompts after board reset)",
         'color': "#FFFFF3",
         'position_x': 700,
-        'position_y': 200
+        'position_y': 200,
+        'is_prompt': True  # Explicitly set as a prompt
     },
     {
         'id': 2,
         'content': "DEFAULT PROMPT 2. (should be put into prompts after board reset)",
         'color': "#FFFFF3",
         'position_x': 200,
-        'position_y': 500
+        'position_y': 500,
+        'is_prompt': True  # Explicitly set as a prompt
     }
 ]
 
@@ -270,6 +275,7 @@ def create_prompt():
         'color': data.get('color', '#FFFFF3'),
         'position_x': data.get('position_x', 0),
         'position_y': data.get('position_y', 0),
+        'is_prompt': True,
         'created_at': datetime.utcnow().isoformat()
     }
     

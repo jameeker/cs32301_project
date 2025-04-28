@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { NavButtonBar } from '../../components';
-import ViewNoteOverlay from '../page_view_note/view_note';
+import ViewNotePersonalOverlay from '../page_view_note_personal/view_note_personal';
+import WriteNoteOverlay from '../page_write_note/write_note';
 import { getClientId } from '../../utils/utils';
 import './personal_board.css';
 
@@ -33,11 +34,49 @@ const backgrounds = [
 const PagePersonalBoard = () => {
   const [bgIndex, setBgIndex] = useState(0);
   const [showNoteOverlay, setShowNoteOverlay] = useState(false);
+  const [showWriteOverlay, setShowWriteOverlay] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
   const [savedNotes, setSavedNotes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [clickPosition, setClickPosition] = useState({ x: 0.5, y: 0.5 });
   const history = useHistory(); 
+
+  // Function to trash a note by moving it to the trash section
+  const trashNote = async (note) => {
+    try {
+      // Extract the original note ID (removing the 1000 offset we added for display)
+      const originalNoteId = note.id > 1000 ? note.id - 1000 : note.id;
+      
+      console.log("Trashing note with ID:", originalNoteId);
+      
+      console.log(`Using note ID: ${originalNoteId} to call trash endpoint`);
+      
+      // Call the API to move the note to trash
+      const response = await fetch(`http://127.0.0.1:5000/api/personal-board/notes/${originalNoteId}/trash`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          client_id: 'system_user'
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log("Note trashed successfully:", data);
+      
+      // Refresh notes to remove the trashed note from the board
+      fetchSavedNotes();
+    } catch (err) {
+      console.error("Error trashing note:", err);
+      alert("Failed to move note to trash. Please try again.");
+    }
+  };
 
   // Function to fetch saved notes from the API
   const fetchSavedNotes = async () => {
@@ -45,11 +84,9 @@ const PagePersonalBoard = () => {
       setLoading(true);
       console.log("Fetching saved notes from API...");
       
-      // Get the client ID for the current user
-      const clientId = getClientId();
-      
-      // Call the personal board API
-      const response = await fetch(`/api/personal-board/notes?client_id=${clientId}`);
+      // Use system_user for fetching notes to match the ID we use for saving
+      // This ensures consistency between saving and viewing notes
+      const response = await fetch(`/api/personal-board/notes?client_id=system_user`);
       
       // Handle HTTP errors
       if (!response.ok) {
@@ -99,7 +136,8 @@ const PagePersonalBoard = () => {
     });
   };
 
-  const notes = [
+  // Use state for hardcoded notes so we can update them
+  const [hardcodedNotes, setHardcodedNotes] = useState([
     { id: 1, header: 'note 1', body: 'first body', color: '#ffd3b6', position_x: 100, position_y: 100 },
     { id: 2, header: 'note 2', body: 'second body', color: '#ffffcc', position_x: 300, position_y: 150 },
     { id: 3, header: 'note 3', body: 'totally testing body', color: '#ccffcc', position_x: 500, position_y: 200 },
@@ -112,7 +150,7 @@ const PagePersonalBoard = () => {
     { id: 10, header: 'note 10', body: 'Fully Puncuated And, Capitalized Body!', color: '#ffffcc', position_x: 1000, position_y: 150 },
     { id: 11, header: 'note 11', body: 'eleventh body', color: '#ffccff', position_x: 780, position_y: 350 },
     { id: 12, header: 'note 12', body: 'twelfth body', color: '#ccffcc', position_x: 880, position_y: 40 }
-  ];
+  ]);
 
   const prompts = [
     {
@@ -163,15 +201,87 @@ const PagePersonalBoard = () => {
   
   // Combine hardcoded notes with API-fetched notes
   const allNotes = [
-    ...notes,
+    ...hardcodedNotes.filter(note => !note.isDeleted), // Only show non-deleted hardcoded notes
     ...savedNotes.map(formatApiNote)
   ];
+
+  // Helper function to remove a note from the local notes array
+  const removeNoteFromBoard = (noteId) => {
+    console.log(`Removing note with ID ${noteId} from board`);
+    
+    if (noteId <= 12) {
+      // If it's a hardcoded note (ID 1-12), mark it as deleted
+      setHardcodedNotes(prevNotes => 
+        prevNotes.map(note => 
+          note.id === noteId ? {...note, isDeleted: true} : note
+        )
+      );
+    }
+    
+    // Refresh the board
+    setSelectedNote(null);
+    fetchSavedNotes();
+  };
+
+  // Handler for when the board is clicked (to create a new note)
+  const handleBoardClick = (e) => {
+    // Calculate position relative to board (0-1 range)
+    const rect = e.currentTarget.getBoundingClientRect();
+    const posX = (e.clientX - rect.left) / rect.width;
+    const posY = (e.clientY - rect.top) / rect.height;
+    
+    // Store position for use when creating note
+    setClickPosition({ x: posX, y: posY });
+    setShowWriteOverlay(true);
+  };
+  
+  // Function to handle saving a new note
+  const saveNote = async (noteData) => {
+    try {
+      console.log("Saving note with data:", noteData);
+      
+      // Get the client ID for the current user
+      const clientId = getClientId();
+      
+      // Convert position from 0-1 range to pixels (expected by the backend)
+      const dataToSend = {
+        ...noteData,
+        position_x: noteData.position_x * 1000, // Convert to pixels
+        position_y: noteData.position_y * 500,  // Convert to pixels
+        client_id: 'system_user' // Changed from user_id to client_id to match backend expectation
+      };
+      
+      console.log("Sending data to API:", dataToSend);
+      
+      // Call the API to save the note
+      const response = await fetch('/api/personal-board/notes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const savedNote = await response.json();
+      console.log("Note saved successfully:", savedNote);
+      
+      // Refresh the notes list to show the newly created note
+      fetchSavedNotes();
+    } catch (err) {
+      console.error("Error saving note:", err);
+      alert("Failed to save your note. Please try again.");
+    }
+  };
 
   return (
     <div className="personal-board" style={{ backgroundImage: `url(${backgrounds[bgIndex]})` }}>
       <h1 style={{ color: 'white' }}>Personal Bulletin Board</h1>
 
-      <div className="board">
+      <div className="board" onClick={handleBoardClick}>
         <NavButtonBar />
         
         {/* Display any loading or error state */}
@@ -235,11 +345,35 @@ const PagePersonalBoard = () => {
       </div>
 
       {showNoteOverlay && selectedNote && (
-        <ViewNoteOverlay
+        <ViewNotePersonalOverlay
           note={selectedNote}
           onClose={() => {
             setShowNoteOverlay(false);
             setSelectedNote(null);
+          }}
+          onTrash={(note) => {
+            // For hardcoded notes (id less than or equal to 12), just mark as deleted locally
+            if (note.id <= 12) {
+              removeNoteFromBoard(note.id);
+              setShowNoteOverlay(false);
+              setSelectedNote(null);
+            } else {
+              // For API-created notes, use the API
+              trashNote(note);
+              setShowNoteOverlay(false);
+              setSelectedNote(null);
+            }
+          }}
+        />
+      )}
+      
+      {showWriteOverlay && (
+        <WriteNoteOverlay 
+          position={clickPosition}
+          onClose={() => setShowWriteOverlay(false)} 
+          onSave={(noteData) => {
+            saveNote(noteData);
+            setShowWriteOverlay(false);
           }}
         />
       )}
