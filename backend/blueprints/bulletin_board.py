@@ -1,3 +1,7 @@
+"""
+bulletin_board.py -- Main Python blueprint for the Bulletin Board page that implements all functionality for the page
+"""
+
 from flask import Blueprint, jsonify, request
 from datetime import datetime, date
 from database.db import get_db, create_new_note, get_public_notes, save_note_to_personal, Note, NoteState

@@ -1,4 +1,6 @@
-# Tests database operations: create_new_note(), remove_note(), modify_note(), filter_notes()
+"""
+test_db_ops.py -- Tests database operations: create_new_note(), remove_note(), modify_note(), filter_notes()
+"""
 from db import get_db, filter_notes, create_new_note, modify_note, remove_note
 from datetime import datetime, timedelta
 

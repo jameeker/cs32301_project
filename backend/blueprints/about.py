@@ -1,3 +1,7 @@
+"""
+about.py -- Main Python blueprint for the About page that implements all functionality for the page
+"""
+
 from flask import Blueprint, jsonify
 
 # Create about page blueprint

@@ -1,3 +1,7 @@
+"""
+personal_board.py -- Main Python blueprint for the Personal Board page that implements all functionality for the page
+"""
+
 from flask import Blueprint, jsonify, request
 from datetime import datetime
 from database.db import get_db, get_personal_notes, move_note_to_trash, get_trashed_notes

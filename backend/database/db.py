@@ -1,6 +1,7 @@
-# Database configuration and SQLAlchemy models for the bulletin board application
-# Provides database connection, ORM models, and helper functions for common operations
-
+"""
+db.py -- Database config and SQLAlchemy models for Flask app
+Provides database connection, ORM models, and helper functions for database operations used throughout codebase
+"""
 import configparser
 import os
 from datetime import datetime, timedelta

@@ -1,3 +1,7 @@
+"""
+how_to.py -- Main Python blueprint for the How-to page that implements all functionality for the page
+"""
+
 from flask import Blueprint, jsonify
 
 # Create the how-to blueprint

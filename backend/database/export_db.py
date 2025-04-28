@@ -1,4 +1,6 @@
-# export_db.py -- exports the entire database to a .csv
+"""
+export_db.py -- exports the entire database to a .csv
+"""
 
 import os
 import pandas as pd

@@ -1,4 +1,6 @@
-# test_db.py -- gives a quick overview of what's in the database without manual SQL queries
+"""
+test_db.py -- gives a quick overview of what's in the database without manual SQL queries
+"""
 import time
 from datetime import datetime
 from db import (
