@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import logo from './logo.svg';
 // Importing Stuff
-import { PageBulletinBoard, PagePersonalBoard, PageAbout, HowTo, ClockStats, ViewNote, WriteNote } from '../pages';
+import { PageBulletinBoard, PagePersonalBoard, PageAbout, HowTo, ClockStats, ViewNote, WriteNote, PageTrash } from '../pages';
 
 function App() {
     return (
@@ -17,6 +17,7 @@ function App() {
           <Route path="/clock-stats" component={ClockStats} />
           <Route path="/view-note" component={ViewNote} />
           <Route path="/write-note" component={WriteNote} />
+          <Route path="/trash" component={PageTrash} />
         </Switch>
       </div>
     </Router>

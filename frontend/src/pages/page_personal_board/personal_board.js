@@ -5,8 +5,8 @@ import ViewNoteOverlay from '../page_view_note/view_note';
 import './personal_board.css';
 
 // Import Background Images
+import bgAdobe from '../../assets/backgrounds/AdobeStock_1376412387.jpeg';
 import bgWhite from '../../assets/backgrounds/background_white.jpg';
-
 import bgSquiggles from '../../assets/backgrounds/pexels-dom-j-7304-310452.jpg';
 import bgSky from '../../assets/backgrounds/pexels-padrinan-19670.jpg';
 import bgDots from '../../assets/backgrounds/pexels-padrinan-255379.jpg';
@@ -17,6 +17,7 @@ import bgYellowWood from '../../assets/backgrounds/pexels-pixabay-326347.jpg'
 import bgGrunge from '../../assets/backgrounds/pexels-timmossholder-936800.jpg'
 
 const backgrounds = [
+  bgAdobe, // Set Adobe Stock image as default background
   bgSoftWood,
   bgSquiggles,
   bgSky,
@@ -35,7 +36,13 @@ const PagePersonalBoard = () => {
   const history = useHistory(); 
 
   const handleNoteClick = (note) => {
-    setSelectedNote(note);
+    // Create a modified note that the ViewNoteOverlay component can use
+    // ViewNoteOverlay expects a note with a 'content' property, but our notes have 'header' and 'body'
+    const modifiedNote = {
+      ...note,
+      content: note.header ? `${note.header}\n\n${note.body}` : note.body
+    };
+    setSelectedNote(modifiedNote);
     setShowNoteOverlay(true);
   };
 
@@ -90,7 +97,7 @@ const PagePersonalBoard = () => {
 
   return (
     <div className="personal-board" style={{ backgroundImage: `url(${backgrounds[bgIndex]})` }}>
-      <h1>Personal Bulletin Board</h1>
+      <h1 style={{ color: 'white' }}>Personal Bulletin Board</h1>
 
       <div className="board">
         <NavButtonBar />
@@ -145,9 +152,11 @@ const PagePersonalBoard = () => {
         ))}
       </div>
 
-      <button className="arrow" onClick={() => changeBackground('prev')}>◀</button>
-      <button className="arrow" onClick={() => changeBackground('next')}>▶</button>
-      <button className="trash-can" onClick={() => history.push('/trash')}>🗑️</button>
+      <div className="button-container">
+        <button className="arrow" onClick={() => changeBackground('prev')}>◀</button>
+        <button className="arrow" onClick={() => changeBackground('next')}>▶</button>
+        <button className="trash-can" onClick={() => history.push('/trash')}>🗑️</button>
+      </div>
 
       {showNoteOverlay && selectedNote && (
         <ViewNoteOverlay
