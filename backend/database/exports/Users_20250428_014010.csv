@@ -1,0 +1,9 @@
+user_id,session_token,created_at,last_active,user_agent,ip_hash,theme_preference,board_background
+SEED-TEST-DATA-USER-001,test-session-token,2025-04-23 15:32:02,2025-04-23 15:32:02,Python/3.x,dummyhash123,default,default_corkboard.jpg
+system_user,system-token,2025-04-27 18:50:42,2025-04-28 03:42:12,System User,system,default,default_corkboard.jpg
+user-2,token-2,2025-04-27 14:27:59,2025-04-27 14:27:59,Mozilla/5.0,536f1bf1f85cd42c27b830dcd2d1e87556ef3544b43e74d464f102d51d380c26,default,default_corkboard.jpg
+user-3,token-3,2025-04-27 14:27:59,2025-04-27 14:27:59,Mozilla/5.0,3fbd83a8354d192c96e3576120c638d973ed8b2278274f83f087ba8f30a91492,default,default_corkboard.jpg
+user-4,token-4,2025-04-27 14:27:59,2025-04-27 14:27:59,Mozilla/5.0,fda571205baed9625f1ceb9ae76e086e7809b1d67a8a408063ab3eba932bfeab,default,default_corkboard.jpg
+user-5,token-5,2025-04-27 14:27:59,2025-04-27 14:27:59,Mozilla/5.0,09bf09ae4eaa5996a357cba8ae0289852770f9fe9c426cbf942a78224a98935a,default,default_corkboard.jpg
+user-6,token-6,2025-04-27 14:27:59,2025-04-27 14:27:59,Mozilla/5.0,2657f32a50fe53485b1211ee39e1a490d2f357aa1a174c2dbc2a25c9f8f38657,default,default_corkboard.jpg
+user-test-1,session-token-123,2025-04-23 10:29:03,2025-04-23 10:29:03,Mozilla/5.0,12ca17b49af2289436f303e0166030a21e525d266e209267433801a8fd4071a0,default,default_corkboard.jpg
