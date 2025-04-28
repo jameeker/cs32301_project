@@ -5,7 +5,7 @@
   padding: 1% 0.5%;
   box-sizing: border-box;
     
-  background-image: url('../../assets/backgrounds/pexels-pixabay-301717.jpg');
+  background-image: url('../../assets/backgrounds/8148_Kent-State-Design-Innovation_10.jpg');
   background-size: cover; 
   background-position: center;
   background-repeat: no-repeat;
@@ -30,7 +30,7 @@
   
   min-height: 90%;
   transform: translateX(100px);
-  max-width: 50%;
+  max-width: 65%;
   position: relative;
   padding: 10px 20px;
   background-color: #ffffff !important; /* White board color */
