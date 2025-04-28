@@ -1,2 +1,2 @@
-// This file acts as the main export point for this directory
+// Main export point for the view personal note page subdir
 export { default } from './view_note_personal';

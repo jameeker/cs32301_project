@@ -1,2 +1,2 @@
-// This file acts as the main export point for this directory
+// Main export point for the write a note page subdir
 export { default } from './write_note';

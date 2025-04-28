@@ -1,2 +1,2 @@
-// This file acts as the main export point for this directory
+// Main export point for the clock stats page subdir
 export { default } from './clock_stats';

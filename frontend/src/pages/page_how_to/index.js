@@ -1,2 +1,2 @@
-// This file acts as the main export point for this directory
+// Main export point for the how-to page subdir
 export { default } from './how_to';
