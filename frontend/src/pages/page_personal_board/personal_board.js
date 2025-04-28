@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { NavButtonBar } from '../../components';
 import ViewNoteOverlay from '../page_view_note/view_note';
+import WriteNoteOverlay from '../page_write_note/write_note';
 import './personal_board.css';
 
 // Import Background Images
@@ -31,6 +32,7 @@ const backgrounds = [
 const PagePersonalBoard = () => {
   const [bgIndex, setBgIndex] = useState(0);
   const [showNoteOverlay, setShowNoteOverlay] = useState(false);
+  const [showWriteOverlay, setShowWriteOverlay] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
   const history = useHistory(); 
 
@@ -38,6 +40,12 @@ const PagePersonalBoard = () => {
     setSelectedNote(note);
     setShowNoteOverlay(true);
   };
+
+  const handleBoardClick = (e) => {
+    if (!showNoteOverlay && !showWriteOverlay) {
+        setShowWriteOverlay(true);
+      }
+  }
 
   const changeBackground = (direction) => {
     setBgIndex((prevIndex) => {
@@ -89,10 +97,21 @@ const PagePersonalBoard = () => {
   ];
 
   return (
-    <div className="personal-board" style={{ backgroundImage: `url(${backgrounds[bgIndex]})` }}>
+    <div 
+        className="personal-board"
+        style={{ backgroundImage: `url(${backgrounds[bgIndex]})` }}
+    >
       <h1>Personal Bulletin Board</h1>
 
-      <div className="board">
+      <div 
+        className="board" 
+        style={{ 
+        position: 'relative', 
+        minHeight: '600px',
+        cursor: !showNoteOverlay && !showWriteOverlay ? 'crosshair' : 'default'
+        }}
+        onClick={handleBoardClick}
+      >
         <NavButtonBar />
 
         {prompts.map(prompt => (
@@ -149,6 +168,11 @@ const PagePersonalBoard = () => {
       <button className="arrow" onClick={() => changeBackground('next')}>▶</button>
       <button className="trash-can" onClick={() => history.push('/trash')}>🗑️</button>
 
+      {/* Conditional rendering of other overlays */}
+      {showWriteOverlay && (
+        <WriteNoteOverlay onClose={() => setShowWriteOverlay(false)} />
+      )}
+
       {showNoteOverlay && selectedNote && (
         <ViewNoteOverlay
           note={selectedNote}
@@ -156,6 +180,7 @@ const PagePersonalBoard = () => {
             setShowNoteOverlay(false);
             setSelectedNote(null);
           }}
+          isPersonalBoard={true} 
         />
       )}
     </div>

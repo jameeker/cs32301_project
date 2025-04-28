@@ -301,7 +301,8 @@ const PageBulletinBoard = () => {
           onClose={() => {
             setShowNoteOverlay(false);
             setSelectedNote(null);
-          }}      
+          }}
+          isPersonalBoard={false}
         />
       )}
     </div>

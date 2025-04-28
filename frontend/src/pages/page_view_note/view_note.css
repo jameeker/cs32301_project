@@ -12,7 +12,7 @@
   
 }
 
-.modal.sticky-note {
+.note-modal {
   position: relative;
   width: 300px;
   min-height: 200px;
@@ -82,6 +82,15 @@
 
 .close-x:hover {
   color: #cc0000;
+}
+
+.trash-icon {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
 }
 
 /* Background color variations */
