@@ -15,7 +15,7 @@ def create_app(config_class=Config):
     
     # Enable CORS
     # CORS(app)
-    CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:3000"}})
+    CORS(app, resources={r"/api/*": {"origins": ["http://127.0.0.1:3000", "http://our-notes.com:3000"]}})
     
     # Register blueprints
     app.register_blueprint(bulletin_board)

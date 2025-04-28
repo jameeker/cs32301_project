@@ -107,3 +107,36 @@ h1 {
   background-color: rgba(74, 144, 226, 0.3); /* Subtle blue glow within button */
   transform: none;
 }
+
+/* Loading indicator */
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-size: 18px;
+  color: #333;
+  z-index: 10;
+}
+
+/* Error message */
+.error-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 220, 220, 0.9);
+  padding: 15px 25px;
+  border-radius: 8px;
+  border: 1px solid #faa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  color: #922;
+  z-index: 10;
+  max-width: 80%;
+  text-align: center;
+}

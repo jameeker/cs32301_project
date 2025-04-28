@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { NavButtonBar } from '../../components';
 import ViewNoteOverlay from '../page_view_note/view_note';
+import { getClientId } from '../../utils/utils';
 import './personal_board.css';
 
 // Import Background Images
@@ -33,7 +34,48 @@ const PagePersonalBoard = () => {
   const [bgIndex, setBgIndex] = useState(0);
   const [showNoteOverlay, setShowNoteOverlay] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
+  const [savedNotes, setSavedNotes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const history = useHistory(); 
+
+  // Function to fetch saved notes from the API
+  const fetchSavedNotes = async () => {
+    try {
+      setLoading(true);
+      console.log("Fetching saved notes from API...");
+      
+      // Get the client ID for the current user
+      const clientId = getClientId();
+      
+      // Call the personal board API
+      const response = await fetch(`/api/personal-board/notes?client_id=${clientId}`);
+      
+      // Handle HTTP errors
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      // Parse the JSON response
+      const data = await response.json();
+      console.log("API response data:", data);
+      
+      // Update state with the fetched data
+      setSavedNotes(data);
+    } catch (err) {
+      // Handle any errors that occurred during fetch
+      console.error("Error fetching saved notes:", err);
+      setError("Failed to load saved notes. Please try again later.");
+    } finally {
+      // Set loading to false regardless of success or failure
+      setLoading(false);
+    }
+  };
+  
+  // Fetch saved notes when component mounts
+  useEffect(() => {
+    fetchSavedNotes();
+  }, []);
 
   const handleNoteClick = (note) => {
     // Create a modified note that the ViewNoteOverlay component can use
@@ -95,12 +137,46 @@ const PagePersonalBoard = () => {
     }
   ];
 
+  // Convert API note format to match hardcoded notes format
+  const formatApiNote = (apiNote) => {
+    // Split content into header and body if it contains two newlines
+    let header = '';
+    let body = apiNote.content;
+    
+    if (apiNote.content) {
+      const parts = apiNote.content.split('\n\n');
+      if (parts.length > 1) {
+        header = parts[0];
+        body = parts.slice(1).join('\n\n');
+      }
+    }
+    
+    return {
+      id: apiNote.id + 1000, // Add 1000 to avoid ID conflicts with hardcoded notes
+      header: header,
+      body: body,
+      color: apiNote.color || '#ffd3b6',
+      position_x: apiNote.position_x || 500,
+      position_y: apiNote.position_y || 200
+    };
+  };
+  
+  // Combine hardcoded notes with API-fetched notes
+  const allNotes = [
+    ...notes,
+    ...savedNotes.map(formatApiNote)
+  ];
+
   return (
     <div className="personal-board" style={{ backgroundImage: `url(${backgrounds[bgIndex]})` }}>
       <h1 style={{ color: 'white' }}>Personal Bulletin Board</h1>
 
       <div className="board">
         <NavButtonBar />
+        
+        {/* Display any loading or error state */}
+        {loading && <div className="loading-indicator">Loading saved notes...</div>}
+        {error && <div className="error-message">{error}</div>}
 
         {prompts.map(prompt => (
           <div
@@ -128,7 +204,7 @@ const PagePersonalBoard = () => {
           </div>
         ))}
 
-        {notes.map(note => (
+        {allNotes.map(note => (
           <div
             key={note.id}
             className="note"
