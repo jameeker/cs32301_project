@@ -1,27 +1,24 @@
-# db.py - Python file with all the SQLAlchemy connection and tables (called 'models') to interact with our database
+# Database configuration and SQLAlchemy models for the bulletin board application
+# Provides database connection, ORM models, and helper functions for common operations
+
 import configparser
 import os
 from datetime import datetime, timedelta
 
-# SQLAlchemy imports - these are the core SQLAlchemy components we need
+# SQLAlchemy imports for database interaction
 from sqlalchemy import text, func
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Boolean, Float, ForeignKey, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker, scoped_session
 
-# Read database configuration from yoyo.ini file
+# Load database connection string from configuration file
 config = configparser.ConfigParser()
 ini_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'yoyo.ini')
 config.read(ini_path)
 DATABASE_URL = config['DEFAULT']['database']
 
-# Create a SQLAlchemy engine which connects to the hic_project MySQL database
-# Adjust pool settings to prevent connection timeouts
-# - pool_pre_ping: Test connections before use
-# - pool_recycle: Recycle connections after 3600 seconds (1 hour)
-# - pool_size: Increase max connections
-# - max_overflow: Allow more overflow connections
-# - pool_timeout: Longer timeout when waiting for connection
+# Create database engine with default connection parameters
+# Production settings commented out below for reference
 # engine = create_engine(
 #     DATABASE_URL,
 #     pool_pre_ping=True,  # Test connection before use to avoid stale connections
@@ -32,18 +29,22 @@ DATABASE_URL = config['DEFAULT']['database']
 # )
 engine = create_engine(DATABASE_URL)
 
-# Create session factory - this lets you create sessions to talk to the database
+# Create session factory for database interactions
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
-# Create base class for models - all table classes will inherit from this base class
+# Base class for ORM models - all table classes inherit from this
 Base = declarative_base()
 
-# Defined database models (tables) as Python classes
-# (!) Each class = one database table (!)
-# Columns - each one matches a column in the MySQL table
-# __tablename__    = "Users" # Table name
+#-----------------------------------------------------------------------------
+# DATABASE MODELS
+#-----------------------------------------------------------------------------
+
 class User(Base):
+    """User model representing application users.
+    
+    Stores user identifiers and preferences, with each user identified by a unique user_id.
+    """
     __tablename__    = "Users"
     user_id          = Column(String(255), primary_key=True)
     session_token    = Column(String(255), unique=True, nullable=False)
@@ -55,24 +56,29 @@ class User(Base):
     board_background = Column(String(255), default="default_corkboard.jpg")
 
 class Note(Base):
+    """Note model representing content posted to bulletin boards.
+    
+    Notes can be regular sticky notes or prompts, and have various attributes
+    including content, color, position, and creator.
+    """
     __tablename__     = "Notes"
     note_id           = Column(Integer, primary_key=True, autoincrement=True)
-    content           = Column(Text, nullable=False)
-    color             = Column(String(20), default="yellow", nullable=False)
-    format            = Column(String(20), default="text")
+    content           = Column(Text, nullable=False)                         # The text content of the note
+    color             = Column(String(20), default="yellow", nullable=False) # CSS color value
+    format            = Column(String(20), default="text")                   # Format of the content (text, markdown, etc.)
     created_at        = Column(DateTime, default=datetime.utcnow, nullable=False)
-    expires_at        = Column(DateTime, nullable=False)
+    expires_at        = Column(DateTime, nullable=False)                     # When the note should expire (typically 24h after creation)
     type              = Column(Enum("sticky", "poster", name="note_type"), default="sticky", nullable=False)
-    is_prompt         = Column(Boolean, default=False, nullable=False)
-    prompt_id         = Column(Integer, ForeignKey("Notes.note_id", ondelete="SET NULL"))
+    is_prompt         = Column(Boolean, default=False, nullable=False)       # Whether this note is a prompt for users
+    prompt_id         = Column(Integer, ForeignKey("Notes.note_id", ondelete="SET NULL")) # Parent prompt if this is a response
     created_by        = Column(String(255), ForeignKey("Users.user_id", ondelete="CASCADE"), nullable=False)
-    is_auto_generated = Column(Boolean, default=False, nullable=False)
+    is_auto_generated = Column(Boolean, default=False, nullable=False)       # Whether this was auto-generated by the system
     
-    # Define a relationship to allow easy access to the note creator and its note states
+    # Relationships for easier ORM access
     creator = relationship("User", backref="notes")
     states = relationship("NoteState", backref="note", cascade="all, delete-orphan")
     
-    # Helper function to calculate expiration time
+    # Helper method to create a note with default expiration of 24 hours
     @classmethod
     def create(cls, **kwargs):
         if 'expires_at' not in kwargs:
@@ -80,35 +86,66 @@ class Note(Base):
         return cls(**kwargs)
 
 class NoteState(Base):
+    """NoteState model representing the current state and position of a note.
+    
+    Each note can have multiple states (public, personal, trash, archived)
+    allowing the same note to appear in different views for different users.
+    """
     __tablename__ = "Note_States"
     state_id      = Column(Integer, primary_key=True, autoincrement=True)
     note_id       = Column(Integer, ForeignKey("Notes.note_id", ondelete="CASCADE"), nullable=False)
+    # State values: public (on main board), personal (saved to user's board), trash, archived
     state         = Column(Enum("public", "personal", "trash", "archived", name="state_type"), nullable=False)
     user_id       = Column(String(255), ForeignKey("Users.user_id", ondelete="CASCADE"))
-    position_x    = Column(Float, default=0.5)
-    position_y    = Column(Float, default=0.5)
+    # Position values are normalized 0-1 values (not pixels) for responsive layout
+    position_x    = Column(Float, default=0.5)  # Horizontal position as fraction of board width
+    position_y    = Column(Float, default=0.5)  # Vertical position as fraction of board height
     added_at      = Column(DateTime, default=datetime.utcnow, nullable=False)
-    weather_level = Column(Integer, default=0, nullable=False)
-    z_index       = Column(Integer, default=0)
-    rotation      = Column(Float, default=0)
+    weather_level = Column(Integer, default=0, nullable=False)  # Visual effect intensity (unused)
+    z_index       = Column(Integer, default=0)                  # For note stacking order
+    rotation      = Column(Float, default=0)                    # Rotation angle in degrees
     
-    # Define relationship to access user
+    # Relationship to access the user who owns this state
     user = relationship("User", backref="note_states")
 
-# Helper functions to make database operations easier ########################################################################
+#-----------------------------------------------------------------------------
+# DATABASE ACCESS FUNCTIONS
+#-----------------------------------------------------------------------------
+
 def get_db():
-    """Get a database session"""
+    """Get a database session for performing operations.
+    
+    Returns:
+        SQLAlchemy session object that will be automatically closed when done.
+    """
     db = Session()
     try:
         return db
     finally:
-        # Make sure to close when done - this will be called when your Flask app tears down
+        # Session will be closed when the request is completed
         db.close()
 
-# Database operations - Simple functions for common tasks ######################################################
+#-----------------------------------------------------------------------------
+# CORE DATABASE OPERATIONS
+#-----------------------------------------------------------------------------
+
 def create_new_note(db, content, user_id, color="yellow", is_prompt=False, prompt_id=None, position_x=0.5, position_y=0.5):
-    """Create a new note and add it to the public board"""
-    # Create the note object - this is using the SQLAlchemy ORM
+    """Create a new note and add it to the public board.
+    
+    Args:
+        db: Active database session
+        content: Text content for the note
+        user_id: ID of the user creating the note
+        color: CSS color value for the note background
+        is_prompt: Whether this note is a prompt
+        prompt_id: ID of parent prompt if this is a response
+        position_x: Horizontal position (0-1 range)
+        position_y: Vertical position (0-1 range)
+        
+    Returns:
+        Newly created Note object with ID assigned
+    """
+    # Create the note object using the helper method for expiration
     new_note = Note.create(
         content=content,
         color=color,
@@ -119,9 +156,9 @@ def create_new_note(db, content, user_id, color="yellow", is_prompt=False, promp
     
     # Add to database and get ID
     db.add(new_note)
-    db.flush()  # This gets the ID without committing
+    db.flush()  # Gets the ID without committing transaction
     
-    # Create public state for the note
+    # Create the public state for this note (visible on main board)
     public_state = NoteState(
         note_id=new_note.note_id,
         state="public",
@@ -130,14 +167,14 @@ def create_new_note(db, content, user_id, color="yellow", is_prompt=False, promp
     )
     db.add(public_state)
     
-    # Update user's last active timestamp
+    # Also update the user's last active timestamp
     user = db.query(User).filter(User.user_id == user_id).first()
     
-    # If user exists, update timestamp - if not, create a user
     if user:
+        # Update existing user's last activity time
         user.last_active = datetime.utcnow()
     else:
-        # Create a temporary user if it doesn't exist (for anonymous notes)
+        # Create temporary user if they don't exist yet (for anonymous notes)
         new_user = User(
             user_id=user_id,
             session_token=f"temp-{datetime.utcnow().timestamp()}",
@@ -146,22 +183,48 @@ def create_new_note(db, content, user_id, color="yellow", is_prompt=False, promp
         )
         db.add(new_user)
     
-    # Save all changes
+    # Commit all changes
     db.commit()
     return new_note
 
 def get_public_notes(db):
-    """Get all active notes on the public board"""
-    # This query joins Notes and Note_States tables - using SQLAlchemy's query builder
+    """Get all active notes on the public board.
+    
+    Returns a list of (Note, NoteState) tuples for all notes that are:
+    1. Currently in "public" state
+    2. Not expired
+    3. Ordered with prompts first, then by z-index, then by creation date
+    
+    Args:
+        db: Active database session
+        
+    Returns:
+        List of (Note, NoteState) tuples
+    """
     return (db.query(Note, NoteState)
-            .join(NoteState)
-            .filter(NoteState.state == "public")
-            .filter(Note.expires_at > datetime.utcnow())
+            .join(NoteState)  # Join the Notes and Note_States tables
+            .filter(NoteState.state == "public")  # Only public notes
+            .filter(Note.expires_at > datetime.utcnow())  # Not expired
+            # Order: prompts first, then by z-index, then newest first
             .order_by(Note.is_prompt.desc(), NoteState.z_index.asc(), Note.created_at.desc())
             .all())
 
 def save_note_to_personal(db, note_id, user_id, position_x=0.5, position_y=0.5):
-    """Save a note from public board to user's personal board"""
+    """Save a note from public board to user's personal board.
+    
+    Creates a "personal" state for an existing note, making it appear on the
+    user's personal board without affecting the original note.
+    
+    Args:
+        db: Active database session
+        note_id: ID of the note to save
+        user_id: ID of the user saving the note
+        position_x: Horizontal position (0-1 range)
+        position_y: Vertical position (0-1 range)
+        
+    Returns:
+        Newly created NoteState object for the personal board
+    """
     personal_state = NoteState(
         note_id=note_id,
         state="personal",
@@ -174,7 +237,15 @@ def save_note_to_personal(db, note_id, user_id, position_x=0.5, position_y=0.5):
     return personal_state
 
 def get_personal_notes(db, user_id):
-    """Get all notes on a user's personal board"""
+    """Get all notes on a user's personal board.
+    
+    Args:
+        db: Active database session
+        user_id: ID of the user whose personal board to retrieve
+        
+    Returns:
+        List of (Note, NoteState) tuples for notes on personal board
+    """
     return (db.query(Note, NoteState)
             .join(NoteState)
             .filter(NoteState.state == "personal")
@@ -183,16 +254,33 @@ def get_personal_notes(db, user_id):
             .all())
 
 def get_trashed_notes(db, user_id):
-    """Get all notes in a user's trash"""
+    """Get all notes in a user's trash.
+    
+    Args:
+        db: Active database session
+        user_id: ID of the user whose trash to retrieve
+        
+    Returns:
+        List of (Note, NoteState) tuples for trashed notes
+    """
     return (db.query(Note, NoteState)
             .join(NoteState)
             .filter(NoteState.state == "trash")
             .filter(NoteState.user_id == user_id)
-            .order_by(NoteState.added_at.desc())
+            .order_by(NoteState.added_at.desc())  # Most recently trashed first
             .all())
 
 def move_note_to_trash(db, note_id, user_id):
-    """Move a note from personal board to trash"""
+    """Move a note from personal board to trash.
+    
+    Args:
+        db: Active database session
+        note_id: ID of the note to move to trash
+        user_id: ID of the user moving the note
+        
+    Returns:
+        Newly created NoteState object for the trash
+    """
     # First, remove from personal board
     db.query(NoteState)\
       .filter(NoteState.note_id == note_id)\
@@ -229,7 +317,9 @@ def remove_note(db, note_id, user_id=None):
     if user_id and note.created_by != user_id:
         return False  # User is not the owner, deny delete
     
-    db.delete(note)   # This will also delete all associated NoteState entries
+    # When the note is deleted, all associated NoteState entries
+    # will be deleted automatically due to the cascade setting
+    db.delete(note)   
     db.commit()
     return True
 
@@ -257,7 +347,6 @@ def modify_note(db, note_id, new_content, user_id=None):
     db.commit()
     return True
 
-# When you call filter_notes(), make sure to specify the paramaters
 def filter_notes(
     db,
     user_id=None,
@@ -267,8 +356,23 @@ def filter_notes(
     created_before=None,
     within_bounds=None  # Tuple: (x_min, x_max, y_min, y_max)
 ):
+    """Search for notes with various filters.
+    
+    Args:
+        db: Active database session
+        user_id: Filter by note creator
+        text_contains: Filter by text content (case insensitive)
+        color: Filter by note color
+        created_after: Filter by creation date (after this datetime)
+        created_before: Filter by creation date (before this datetime)
+        within_bounds: Filter by position (tuple of x_min, x_max, y_min, y_max)
+        
+    Returns:
+        List of Note objects matching the criteria
+    """
     query = db.query(Note)
     
+    # Apply filters conditionally based on provided parameters
     if user_id:
         query = query.filter(Note.created_by == user_id)
     
@@ -286,6 +390,7 @@ def filter_notes(
 
     if within_bounds:
         x_min, x_max, y_min, y_max = within_bounds
+        # Join with NoteState to filter by position
         query = query.join(NoteState).filter(
             NoteState.position_x >= x_min,
             NoteState.position_x <= x_max,
@@ -295,10 +400,14 @@ def filter_notes(
 
     return query.all()
 
-# Database Testing Functions ##########################################################################################
+#-----------------------------------------------------------------------------
+# DATABASE TESTING AND DEBUGGING FUNCTIONS
+#-----------------------------------------------------------------------------
 
 def show_tables(db, include_yoyo=False, only_app_tables=True):
-    """Show tables that exist in the database
+    """Show tables that exist in the database.
+    
+    Useful for verifying database structure and migrations.
     
     Args:
         db: Database session
@@ -317,18 +426,18 @@ def show_tables(db, include_yoyo=False, only_app_tables=True):
         all_tables = [table for table in all_tables if 'yoyo' not in table.lower()]
     
     if only_app_tables:
-        # Only include your application tables
-        app_tables = ['users', 'notes', 'note_states'] # Changed to lower-case because it wasn't showing with case-sensitivity
-        all_tables = [table for table in all_tables if table in app_tables]
+        # Only include application tables
+        app_tables = ['users', 'notes', 'note_states'] 
+        all_tables = [table for table in all_tables if table.lower() in app_tables]
     
     return all_tables
 
 def count_all_notes(db):
-    """Return the total number of notes in the database"""
+    """Return the total number of notes in the database."""
     return db.query(Note).count()
 
 def count_notes_by_state(db):
-    """Return a count of notes in each state"""
+    """Return a count of notes in each state (public, personal, trash, archived)."""
     results = db.query(NoteState.state, 
                      func.count(NoteState.note_id))\
               .group_by(NoteState.state)\
@@ -336,18 +445,21 @@ def count_notes_by_state(db):
     return dict(results)
 
 def get_recent_notes(db, limit=10):
-    """Get recently created notes with their current states"""
+    """Get recently created notes."""
     return db.query(Note)\
            .order_by(Note.created_at.desc())\
            .limit(limit)\
            .all()
 
 def get_user_stats(db):
-    """Get statistics about users and their notes"""
-    # Count users
+    """Get statistics about users and their notes.
+    
+    Returns a dictionary with user count, notes per user, and average notes per user.
+    """
+    # Count total users
     user_count = db.query(User).count()
     
-    # Count notes per user
+    # Count notes created by each user
     notes_per_user = db.query(
         Note.created_by,
         func.count(Note.note_id)
@@ -367,12 +479,15 @@ def get_user_stats(db):
     }
 
 def dump_table_data(db, model_class):
-    """Return all rows from a table as dictionaries
+    """Return all rows from a table as dictionaries.
+    
+    Useful for debugging and data export.
+    
     Example: dump_table_data(db, User)
     """
     items = db.query(model_class).all()
     
-    # Convert SQLAlchemy objects to dictionaries
+    # Convert SQLAlchemy objects to plain dictionaries
     result = []
     for item in items:
         item_dict = {}
@@ -385,7 +500,10 @@ def dump_table_data(db, model_class):
     return result
 
 def show_table_schema(db, table_name):
-    """Display column information for a specific table"""
+    """Display column information for a specific table.
+    
+    Useful for verifying table structure matches expected schema.
+    """
     result = db.execute(text(f"DESCRIBE `{table_name}`"))
     columns = []
     for row in result:
@@ -400,7 +518,10 @@ def show_table_schema(db, table_name):
     return columns
 
 def check_foreign_keys(db):
-    """Verify foreign key relationships are properly set up"""
+    """Verify foreign key relationships are properly set up.
+    
+    Returns information about all foreign key constraints in the database.
+    """
     result = db.execute(text("""
         SELECT 
             TABLE_NAME, COLUMN_NAME, 
@@ -421,7 +542,10 @@ def check_foreign_keys(db):
     return fk_relationships
 
 def get_db_size(db):
-    """Get the total size of the database and individual tables"""
+    """Get the total size of the database and individual tables.
+    
+    Returns a dictionary with total size and size by table in MB.
+    """
     result = db.execute(text("""
         SELECT 
             table_name,

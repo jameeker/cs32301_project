@@ -1,5 +1,4 @@
-# seed_test_data.py:
-# adds 20 test notes by default (5 are prompts by default)
+# seed_test_data.py -- adds 20 test notes by default (5 are prompts by default)
 
 # Important Things to Note:
 # Not a yoyo migration so can potentially desync your database with the rest of the group's

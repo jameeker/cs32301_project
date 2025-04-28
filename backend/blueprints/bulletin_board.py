@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from datetime import datetime, date
 from database.db import get_db, create_new_note, get_public_notes, save_note_to_personal, Note, NoteState
 
-# Create the blueprint
+# Create bulletin board blueprint
 bulletin_board = Blueprint('bulletin_board', __name__, url_prefix='/api/bulletin-board')
 
 # Used to keep track of when to reset the board
@@ -74,12 +74,8 @@ default_prompts = [
     }
 ]
 
-#####################################################
-# Note FUNCTIONS:
-#####################################################
-
 # Initial function to test with Postman 
-@bulletin_board.route('/notes', methods=['GET']) # API endpoints
+@bulletin_board.route('/notes', methods=['GET']) # API endpoint
 def get_all_public_notes():
     db = get_db()
     notes_with_states = get_public_notes(db)
@@ -101,14 +97,7 @@ def get_all_public_notes():
     
     return jsonify(result)
 
-# Get community notes
-# Checks if its time for a board reset every time this is called
-# @bulletin_board.route('/notes', methods=['GET'])
-# def get_community_notes():
-#     check_for_reset()
-#     return jsonify(notes)
-
-# Create a new note
+# Create a new note function
 @bulletin_board.route('/notes', methods=['POST'])
 def create_note():
     data = request.json
@@ -147,23 +136,7 @@ def create_note():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# This blueprint is not being used - leaving it here for reference
-notes_bp = Blueprint('notes', __name__)
-
-# @notes_bp.route('/notes', methods=['POST'])
-# def create_note_in_notes_bp():
-#     data = request.json
-#     db = get_db()  # Get database session
-#     
-#     # Use the helper function from db.py
-#     new_note = create_new_note(
-#         db=db,
-#         content=data['content'],
-#         user_id=data['user_id'],
-#         color=data.get('color', 'yellow')
-#     )
-#     
-#     return jsonify({"note_id": new_note.note_id}), 201
+notes_bp = Blueprint('notes', __name__) # Notes blueprint
 
 @notes_bp.route('/notes/public', methods=['GET'])
 def get_public_board():
@@ -186,7 +159,7 @@ def get_public_board():
     
     return jsonify(result)
 
-# Save a note to personal board
+# Save a note to personal board function
 @bulletin_board.route('/notes/<int:note_id>/save', methods=['POST'])
 def save_note(note_id):
     data = request.json
@@ -203,7 +176,7 @@ def save_note(note_id):
         if not note_exists:
             return jsonify({"error": f"Note with ID {note_id} not found"}), 404
             
-        # Save note to personal board
+        # Save note to the personal board
         state = save_note_to_personal(
             db=db,
             note_id=note_id,
@@ -223,7 +196,7 @@ def save_note(note_id):
         print(f"Error saving note to personal board: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-# Update an existing note
+# Update an existing note function
 @bulletin_board.route('/notes/<int:note_id>', methods=['PATCH'])
 def update_note(note_id):
     data = request.json
@@ -239,7 +212,7 @@ def update_note(note_id):
 
     return jsonify({"error": "Note not found"}), 404 # 404 - Not found
 
-# Delete a note
+# Delete a note function
 @bulletin_board.route('/notes/<int:note_id>', methods=['DELETE'])
 def delete_note(note_id):
     for note in notes:
@@ -250,21 +223,17 @@ def delete_note(note_id):
     # If no note with the matching id is found
     return jsonify({"error": "Note not found"}), 404
 
-#####################################################
-# Prompt FUNCTIONS:
-#####################################################
-
-# Get community prompts
+# Get community prompt notes function
 @bulletin_board.route('/prompts', methods=['GET'])
 def get_prompts():
     return jsonify(prompts)
 
-# Create a new prompt
+# Create a new prompt function
 @bulletin_board.route('/prompts', methods=['POST'])
 def create_prompt():
     data = request.json
 
-    # Simple validation
+    # Input validation
     if not data or 'content' not in data:
         return jsonify({"error": "Content is required"}), 400
     
@@ -282,9 +251,7 @@ def create_prompt():
     prompts.append(new_prompt)
     return jsonify(new_prompt), 201
 
-# Update an existing prompt
-# Not sure if we need the ability to update a prompt
-# (because all the notes responding to the origninal wouldn't make sense anymore)
+# Update an existing prompt function
 @bulletin_board.route('/prompts/<int:prompt_id>', methods=['PATCH'])
 def update_prompt(prompt_id):
     data = request.json
@@ -300,8 +267,7 @@ def update_prompt(prompt_id):
 
     return jsonify({"error": "Prompt not found"}), 404 # 404 - Not found
 
-# Delete a prompt
-# Also not sure if necessary (because there would be "ghost" notes that respond to nothing)
+# Delete a prompt function
 @bulletin_board.route('/prompts/<int:prompt_id>', methods=['DELETE'])
 def delete_prompt(prompt_id):
     for prompt in prompts:
@@ -312,13 +278,8 @@ def delete_prompt(prompt_id):
     # If no prompt with the matching id is found
     return jsonify({"error": "Prompt not found"}), 404
 
-#####################################################
-# Reset FUNCTIONS:
-#####################################################
-
 # Helper function for reset_board()
 # Might store default prompts in the database later so this is simple right now
-# For example, this might run SQL later
 def get_default_prompts():
     return default_prompts
 
@@ -327,25 +288,19 @@ def get_default_prompts():
 def reset_board():
     # Allows for editing notes and prompts lists
     global notes, prompts
+    notes = []                         # Clear all notes
+    prompts[:] = get_default_prompts() # Reset prompts to defaults
 
-    # Clear all notes
-    notes = []
-
-    # Reset prompts to defaults
-    prompts[:] = get_default_prompts()
-
-# Checks if it is time for a reset
-# If it is, call reset_board()
+# Function that checks if it's time for a reset
 def check_for_reset():
     global last_reset_date
     today = date.today()
     if today != last_reset_date:
-        reset_board()
+        reset_board() # Reset the board if it's time to reset
         last_reset_date = today
 
-# Manual reset for testing purposes
+# Manual reset function for testing purposes
 @bulletin_board.route('/reset', methods=['POST'])
 def manual_reset():
     reset_board()
     return jsonify({"status": "reset successful"})
-#    return jsonify({"success": True}), 200

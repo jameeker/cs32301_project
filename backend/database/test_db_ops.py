@@ -1,6 +1,4 @@
-# Tests database operations:
-# create_new_note(), remove_note(), modify_note(), filter_notes()
-
+# Tests database operations: create_new_note(), remove_note(), modify_note(), filter_notes()
 from db import get_db, filter_notes, create_new_note, modify_note, remove_note
 from datetime import datetime, timedelta
 
@@ -69,11 +67,11 @@ print(f"Note modified: {modified}")
 print("\n--- Verifying note content update ---")
 notes = filter_notes(db, text_contains="Updated test note content after modification")
 if notes:
-    print("✅ Modification confirmed:")
+    print("Modification confirmed:")
     for note in notes:
         print(f"  - {note.content}")
 else:
-    print("❌ Note modification not found.")
+    print("Note modification not found.")
 
 # ----------------------------------------------------------- #
 #                   TESTING remove_note()
@@ -86,8 +84,8 @@ print(f"Note removed: {result}")
 print("\n--- Verifying test note removal ---")
 check = filter_notes(db, text_contains="Temporary test note for removal")
 if not check:
-    print("✅ Test note successfully removed.")
+    print("Test note successfully removed.")
 else:
-    print("❌ Test note still exists!")
+    print("Test note still exists!")
 
 db.close()

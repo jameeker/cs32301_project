@@ -2,10 +2,10 @@ from flask import Blueprint, jsonify, request
 from datetime import datetime
 from database.db import get_db, get_personal_notes, move_note_to_trash, get_trashed_notes
 
-# Create the blueprint
+# Create the personal board blueprint
 personal_board = Blueprint('personal_board', __name__, url_prefix='/api/personal-board')
 
-# Get personal notes
+# Get personal notes function
 @personal_board.route('/notes', methods=['GET'])
 def get_user_personal_notes():
     client_id = request.args.get('client_id')
@@ -39,7 +39,7 @@ def get_user_personal_notes():
         print(f"Error fetching personal notes: {str(e)}")
         return jsonify({"error": f"Failed to load notes: {str(e)}"}), 500
 
-# Get trashed notes
+# Get trashed notes function
 @personal_board.route('/trash', methods=['GET'])
 def get_user_trashed_notes():
     client_id = request.args.get('client_id')
@@ -70,7 +70,7 @@ def get_user_trashed_notes():
         print(f"Error fetching trashed notes: {str(e)}")
         return jsonify({"error": f"Failed to load trashed notes: {str(e)}"}), 500
 
-# Move a note to trash
+# Move a note to trash function
 @personal_board.route('/notes/<int:note_id>/trash', methods=['POST'])
 def trash_note(note_id):
     data = request.json
@@ -97,7 +97,7 @@ def trash_note(note_id):
         print(f"Error trashing note: {str(e)}")
         return jsonify({"error": f"Failed to trash note: {str(e)}"}), 500
 
-# Save a note to personal board directly
+# Save a note to the user's personal board function
 @personal_board.route('/notes', methods=['POST'])
 def save_note():
     from database.db import create_new_note, save_note_to_personal

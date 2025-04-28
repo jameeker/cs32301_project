@@ -93,21 +93,6 @@ def run_tests():
 
     now = datetime.now()
     print(f"run: {now.strftime('%Y-%m-%d %H:%M:%S')}") # Timestamp
-    # print_section("Table Schemas")
-    # for table in tables:
-    #     print(f"\n{table} Schema:")
-    #     schema = show_table_schema(db, table)
-    #     for col in schema:
-    #         print(f"  {col['field']} ({col['type']}) {col['extra']} {'' if col['null'] == 'YES' else 'NOT NULL'}")
-
-    # print_section("Foreign Key Relationships")
-    # fk_relationships = check_foreign_keys(db)
-    # if fk_relationships:
-    #     for fk in fk_relationships:
-    #         print(f"{fk['table']}.{fk['column']} → {fk['references_table']}.{fk['references_column']}")
-    # else:
-    #     print("No foreign key relationships found.")
-
     print_section("Database Health Check")
     health = database_health_check(db)
     print(f"Overall Status: {health['status']}")

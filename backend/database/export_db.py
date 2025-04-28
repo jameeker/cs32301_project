@@ -12,23 +12,23 @@ ini_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'yoyo.ini')
 config.read(ini_path)
 DATABASE_URL = config['DEFAULT']['database']
 
-# Create SQLAlchemy engine
+# Create the SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
 
 def export_table_to_csv(table_name, output_dir='exports'):
     """Export a single table to CSV"""
-    # Create output directory if it doesn't exist
+    # Create the output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
     
-    # Generate timestamp for filename
+    # Generate a timestamp for the filename
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     filename = f"{output_dir}/{table_name}_{timestamp}.csv"
     
-    # Read table into pandas DataFrame
+    # Read table into a pandas DataFrame
     query = f"SELECT * FROM `{table_name}`"
     df = pd.read_sql(query, engine)
     
-    # Export to CSV
+    # Export the table to CSV
     df.to_csv(filename, index=False)
     print(f"Exported {len(df)} rows from {table_name} to {filename}")
     
@@ -42,7 +42,7 @@ def export_all_tables():
         tables = [row[0] for row in result 
                  if not row[0].startswith('_yoyo') and row[0] != 'yoyo_lock']
     
-    # Export each table
+    # Export each of the tables
     exported_files = {}
     for table in tables:
         exported_files[table] = export_table_to_csv(table)
@@ -51,11 +51,11 @@ def export_all_tables():
 
 def export_joined_notes():
     """Export notes with their states joined together"""
-    # Create output directory if it doesn't exist
+    # Create a output directory if it doesn't exist
     output_dir = 'exports'
     os.makedirs(output_dir, exist_ok=True)
     
-    # Generate timestamp for filename
+    # Generate a timestamp for the filename
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     filename = f"{output_dir}/notes_with_states_{timestamp}.csv"
     
@@ -75,7 +75,7 @@ def export_joined_notes():
     # Read joined data into pandas DataFrame
     df = pd.read_sql(query, engine)
     
-    # Export to CSV
+    # Export to a CSV
     df.to_csv(filename, index=False)
     print(f"Exported {len(df)} rows of joined notes and states to {filename}")
     

@@ -9,16 +9,15 @@ from blueprints.personal_board import personal_board
 from blueprints.about import about
 from blueprints.how_to import how_to
 
+# Create app function that initializes the Flask app
 def create_app(config_class=Config):
-    # Initialize Flask app
-    app = Flask(__name__)
+    app = Flask(__name__) # Initialize Flask app
     app.config.from_object(config_class)
     
-    # Enable CORS
-    # CORS(app)
+    # Enable CORS -- Cross-Origin Resource Sharing security feature
     CORS(app, resources={r"/api/*": {"origins": ["http://127.0.0.1:3000", "http://our-notes.com:3000"]}})
     
-    # Register blueprints
+    # Register blueprints for bulletin board, personal board, about, and how to pages
     app.register_blueprint(bulletin_board)
     app.register_blueprint(personal_board)
     app.register_blueprint(about)
