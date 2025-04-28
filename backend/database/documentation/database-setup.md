@@ -1,5 +1,8 @@
 # MySQL Database Step-by-Step Setup
 
+Use these instructions if you're setting up everything for the first time.
+NOTE: Don't follow these instructions if you're importing the database backup file, scroll down to the next Setup
+
 ## (1) - Setup MySQL
 ### 1.1 Install MySQL
 *Inside Terminal*
@@ -98,3 +101,56 @@ Verify migrations by running: `yoyo list --database mysql://user:your_secure_pas
 ### Rollback a Yoyo migration
 To revert to the most recently applied migration, run: 
 `yoyo rollback --database mysql://user:your_secure_password@localhost/hic_project ./database-migrations`
+
+# Restoring a Database from a Backup
+
+Follow these instructions if you just downloaded this repo and need to setup the MySQL database from a dump file.
+
+## (1) - Create the Database
+
+Assuming MySQL is already installed + setup on your system, 
+
+### 1.1 Login to MySQL
+
+macOS/Linux: `mysql -u root -p` (enter the root password you set in step 1.3)
+
+Windows: `"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p`
+PowerShell: `& "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" "-u" "root" "-p"`
+
+### 1.2 Create a new database
+
+```sql
+-- in MySQL,
+CREATE DATABASE hic_project; -- Run this to create the database
+-- The database is named hic_project
+```
+
+## (2) - Import the backup file
+
+In the project root:
+```sql
+mysql -u [username] -p hic_project < backend/database/dumps/full_backup_20250428.sql
+-- change [username] to yours
+-- the dump is located at this filepath: backend/database/dumps/full_backup_20250428.sql
+```
+
+## (3) - Verify success
+
+```mysql
+USE hic_project;
+SHOW TABLES;
+SELECT COUNT(*) FROM Notes;
+```
+
+## (4) - Create or update `yoyo.ini`
+
+If necessary, you'll need to make a `yoyo.ini` file at this file location: `backend/yoyo.ini` if you don't already have one. copy-paste this code and adjust `root` and `password` accordingly to fit your user account/system.
+
+```ini
+[DEFAULT]
+sources = ./database-migrations
+database = mysql://root:password@localhost/hic_project
+migration_table = _yoyo_migration
+batch_mode = off
+verbosity = 0
+```
