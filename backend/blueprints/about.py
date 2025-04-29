@@ -1,9 +1,13 @@
+"""
+about.py -- Main Python blueprint for the About page that implements all functionality for the page
+"""
+
 from flask import Blueprint, jsonify
 
-# Create the blueprint
+# Create about page blueprint
 about = Blueprint('about', __name__, url_prefix='/api/about')
 
-# Get about information
+# Get about page information
 @about.route('', methods=['GET'])
 def get_about():
     about_info = {

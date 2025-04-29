@@ -1,0 +1,11 @@
+.clock-icon {
+  width: 60px;
+  height: 60px;
+  color: rgb(60, 60, 60);
+  transition: color 0.3s;
+}
+
+.clock-icon:hover {
+  color: black;
+  cursor: pointer;
+}

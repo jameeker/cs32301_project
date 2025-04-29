@@ -1,19 +1,204 @@
 .howto-page {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  h1 {
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  ol {
-    line-height: 1.8;
-    margin-left: 20px;
-  }
-  
-  li {
-    margin-bottom: 10px;
-  }
+  width: 100%;
+  min-height: 100vh;
+  background-image: url('../../assets/backgrounds/AdobeStock_1021573494.jpeg');
+  background-size: cover; 
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  padding: 20px;
+}
+
+.howto-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+h2 {
+  color: #555;
+  margin: 30px 0 15px 0;
+}
+
+.section {
+  margin-bottom: 40px;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.section-content {
+  margin-bottom: 20px;
+}
+
+/* Mini Bulletin Board Styles */
+.mini-board {
+  position: relative;
+  width: 350px;
+  height: 200px;
+  margin: 20px auto;
+  background-color: #ffffff;
+  border: 8px solid #844111; /* Wooden frame */
+  outline: 1px solid black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  padding: 5px;
+  cursor: pointer;
+}
+
+/* Sample Notes */
+.sample-note {
+  position: absolute;
+  width: 80px;
+  min-height: 60px;
+  padding: 8px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  border: 1px solid #000000;
+  font-family: "Atkinson Hyperlegible Mono", monospace;
+  font-size: 0.7rem;
+  transform: rotate(-3deg);
+  cursor: pointer;
+  transition: transform 0.2s;
+  z-index: 10;
+}
+
+.sample-note::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #cc0000; /* Red pin */
+  border-radius: 50%;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.sample-note:hover {
+  transform: rotate(0) scale(1.05);
+  z-index: 100;
+}
+
+/* Different note colors */
+.yellow { background-color: #ffffcc; }
+.green { background-color: #ccffcc; }
+.blue { background-color: #ccffff; }
+.pink { background-color: #ffccff; }
+
+/* Red Arrow */
+.red-arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: red;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 15px solid red;
+  margin-top: 5px;
+}
+
+/* Example Overlay Styles */
+.example-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.example-modal {
+  width: 350px;
+  min-height: 250px;
+  background-color: #ffffcc;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  position: relative;
+}
+
+.example-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.example-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.example-body {
+  margin-bottom: 15px;
+}
+
+.example-colors {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.color-sample {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+.example-button {
+  padding: 8px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Instructions */
+.instruction-text {
+  margin: 15px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.character-limit {
+  font-style: italic;
+  color: #666;
+  margin: 10px 0;
+}

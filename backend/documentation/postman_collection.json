@@ -1,0 +1,198 @@
+{
+	"info": {
+		"_postman_id": "4464c2b1-561f-4fcb-be09-7520c0307aff",
+		"name": "cs32301",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37315512"
+	},
+	"item": [
+		{
+			"name": "Check API Health",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/health",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"health"
+					]
+				},
+				"description": "Check if API is heathy"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Notes",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/bulletin-board/notes",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"bulletin-board",
+						"notes"
+					]
+				},
+				"description": "Get bulletin board notes"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Prompts",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/bulletin-board/prompts",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"bulletin-board",
+						"prompts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Notes",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/bulletin-board/reset",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"bulletin-board",
+						"reset"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Note",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"content\": \"Test note from Postman\",\n  \"color\": \"#ffffcc\",\n  \"position_x\": 500,\n  \"position_y\": 250,\n  \"user_id\": \"anonymous\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/bulletin-board/notes",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"bulletin-board",
+						"notes"
+					]
+				},
+				"description": "POST request to add a note."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Prompt",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"content\": \"Postman Prompt note created\",\n  \"color\": \"#FFFFF3\",\n  \"is_prompt\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/bulletin-board/notes",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"bulletin-board",
+						"notes"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
